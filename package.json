@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "balm-ui": "10",
     "firebase": "^9.6.8",
     "pdf-lib": "^1.17.1",
     "vue": "^3.2.25"
