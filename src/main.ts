@@ -18,7 +18,7 @@ getAuth(firebaseApp)
 const app = createApp(App)
 
 app.use(BalmUI);
-app.use(BalmUIPlus);
+app.use(BalmUIPlus)
 
 app.mount('#app')
 

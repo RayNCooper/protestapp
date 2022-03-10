@@ -1,6 +1,6 @@
 interface ProtestUtility {
     name: "Plakate" | "Flyer" | "Pavillons" | "Banner" | "Megaphone" | "Schirme" | "Fahnen" | "Lautsprecher" | "Tische" | "Bühnen"
-    itemCount: number
+    itemCount?: number
 }
 
 interface ProtestEvent {
@@ -13,26 +13,30 @@ interface ProtestEvent {
 
     /* Participation */
     participantCount: number
-    usingStewards: boolean
+    usingStewards: boolean,
     stewardCount?: number
 
     /* Vehicles */
-    usingVehicles: boolean
+    usingVehicles: boolean,
     vehicleCount?: number
     vehicleKinds?: string
 
     /* Utilities */
-    usingUtilities: boolean
-    usedUtilities?: Array<ProtestUtility>
+    usedUtilities: Array<ProtestUtility>
 
     /* Other */
     comments?: string
 }
 
 export interface Versammlung extends ProtestEvent {
-    route?: string
+    type: "Versammlung"
 }
 
-export interface Aufzug extends ProtestEvent { }
+export interface Aufzug extends ProtestEvent {
+    route: string
+    type: "Aufzug"
+}
 
-export interface Mahnwache extends ProtestEvent { }
+export interface Mahnwache extends ProtestEvent {
+    type: "Mahnwache"
+}

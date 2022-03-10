@@ -6,7 +6,7 @@ export interface LegalEntity {
     lastName: string
     streetName: string
     streetNumber: string
-    zipCode: number
+    zipCode: string
     location: string
     phone: string
     fax?: string
@@ -14,7 +14,6 @@ export interface LegalEntity {
 }
 
 export interface Registration {
-    fillForm(): void
     get formMapping()
 
     assembly: Aufzug | Mahnwache | Versammlung
@@ -27,6 +26,12 @@ export interface Registration {
         (4) Der Leiter übt das Hausrecht aus.
     */
     applicant: LegalEntity      // Anmelder
-    organizer: LegalEntity      // Veranstalter 
-    manager: LegalEntity        // Leiter
+    organizer?: LegalEntity      // Veranstalter 
+    manager?: LegalEntity        // Leiter
+
+    /* Gibt es zusätzlich einen Veranstalter? */
+    hasExtraOrganizer: boolean
+
+    /* Gibt es einen delegierten Leiter? */
+    hasExtraManager: boolean
 }
