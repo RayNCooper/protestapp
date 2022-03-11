@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import CitySelection from './components/CitySelection.vue';
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-
+import EventGeneralForm from './components/EventGeneralForm.vue';
+import LegalEntityForm from './components/LegalEntityForm.vue';
 const showDrawer = ref(false)
 </script>
 
@@ -24,27 +23,37 @@ const showDrawer = ref(false)
   <ui-drawer-app-content>
     <!-- App bar -->
     <ui-top-app-bar :type="1" content-selector=".app-content" nav-id="menu">
-      <span>Städte</span>
-      <template #toolbar="{ toolbarItemClass }">
+      <img src="./assets/logo.jpg" style="height: 3em; margin-left: -1em; margin-top: 0.3em;" />
+
+      <!-- <template #toolbar="{ toolbarItemClass }">
         <ui-icon-button :class="toolbarItemClass" icon="file_download"></ui-icon-button>
         <ui-icon-button :class="toolbarItemClass" icon="print"></ui-icon-button>
         <ui-icon-button :class="toolbarItemClass" icon="bookmark"></ui-icon-button>
-      </template>
+      </template>-->
     </ui-top-app-bar>
     <!-- App content -->
-    <div class="app-content">
-      <CitySelection></CitySelection>
+    <div class="content">
+      <LegalEntityForm></LegalEntityForm>
+      <!-- <EventGeneralForm></EventGeneralForm> -->
     </div>
   </ui-drawer-app-content>
 </template>
 
 <style>
+@import "vue-flow-form-css";
+@import "vue-flow-form-theme-css";
 body {
   margin: 0;
 }
 
-.app-content {
+.content {
   width: 100vw;
+  margin-top: 8em;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
 }
 
 .berlin_card_media {

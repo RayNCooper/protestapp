@@ -8,7 +8,9 @@ export default defineConfig({
     alias: {
       vue: 'vue/dist/vue.esm-bundler.js',
       'balm-ui-plus': 'balm-ui/dist/balm-ui-plus.esm.js',
-      'balm-ui-css': 'balm-ui/dist/balm-ui.css'
+      'balm-ui-css': 'balm-ui/dist/balm-ui.css',
+      'vue-flow-form-css': '@ditdot-dev/vue-flow-form/dist/vue-flow-form.css',
+      'vue-flow-form-theme-css': '@ditdot-dev/vue-flow-form/dist/vue-flow-form.theme-minimal.css'
     }
   }
 })

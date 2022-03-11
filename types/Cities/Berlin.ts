@@ -62,7 +62,7 @@ export class BerlinVersammlungRegistration implements Registration {
 
             /* Fahrzeuge */
             usingVehiclesPositive: this.assembly.usingVehicles,
-            usingVehiclesNegative: this.assembly.usingVehicles,
+            usingVehiclesNegative: !this.assembly.usingVehicles,
             vehicleCountKinds: this.assembly.vehicleKinds ? this.assembly.vehicleKinds : "",
 
             /* Sonstiges */

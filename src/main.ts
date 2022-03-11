@@ -17,7 +17,19 @@ getAuth(firebaseApp)
 
 const app = createApp(App)
 
-app.use(BalmUI);
+app.use(BalmUI, {
+    $theme: {
+        primary: "white",
+        secondary: "green",
+        background: "white",
+        surface: "white",
+        error: "red",
+        "on-primary": "black",
+        "on-secondary": "white",
+        "on-surface": "black",
+        "on-error": "white",
+    }
+});
 app.use(BalmUIPlus)
 
 app.mount('#app')

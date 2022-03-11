@@ -25,7 +25,7 @@ export interface Registration {
         (3) Der Veranstalter kann die Leitung einer anderen Person übertragen.
         (4) Der Leiter übt das Hausrecht aus.
     */
-    applicant: LegalEntity      // Anmelder
+    applicant: LegalEntity       // Anmelder
     organizer?: LegalEntity      // Veranstalter 
     manager?: LegalEntity        // Leiter
 
