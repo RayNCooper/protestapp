@@ -10,7 +10,7 @@ export default defineConfig({
       'balm-ui-plus': 'balm-ui/dist/balm-ui-plus.esm.js',
       'balm-ui-css': 'balm-ui/dist/balm-ui.css',
       'vue-flow-form-css': '@ditdot-dev/vue-flow-form/dist/vue-flow-form.css',
-      'vue-flow-form-theme-css': '@ditdot-dev/vue-flow-form/dist/vue-flow-form.theme-minimal.css'
+      'vue-flow-form-theme-css': '../src/assets/vue-flow-form.theme-custom.css'
     }
   }
 })
