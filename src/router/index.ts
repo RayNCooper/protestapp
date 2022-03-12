@@ -1,7 +1,7 @@
 import VueRouter, { createRouter, createWebHistory } from "vue-router";
 import routes from "./routes";
 
-const router = createRouter({ history: createWebHistory('/'), routes });
+const router = createRouter({ history: createWebHistory('/'), routes, strict: true });
 /* router.beforeEach(navigationGuard) */
 
 export default router

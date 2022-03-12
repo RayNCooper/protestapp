@@ -23,7 +23,7 @@ app.use(router)
 app.use(BalmUI, {
     $theme: {
         primary: "white",
-        secondary: "green",
+        secondary: "black",
         background: "white",
         surface: "white",
         error: "red",

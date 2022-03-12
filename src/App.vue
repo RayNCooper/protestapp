@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import CitySelection from './components/CitySelection.vue';
-import EventGeneralForm from './components/EventGeneralForm.vue';
-import LegalEntityForm from './components/LegalEntityForm.vue';
+import CitySelection from './components/Forms/CitySelection.vue';
+import EventGeneralForm from './components/Forms/EventGeneralForm.vue';
+import LegalEntityForm from './components/Forms/LegalEntityForm.vue';
 const showDrawer = ref(false)
 const router = useRouter()
 </script>
@@ -20,19 +20,19 @@ const router = useRouter()
     </ui-drawer-header>
     <ui-drawer-content>
       <ui-nav>
-        <ui-nav-item @click="router.push({ name: 'Dashboard' })">
+        <ui-nav-item :href="router.resolve({ name: 'Dashboard' }).href">
           <ui-item-first-content>
             <ui-icon>space_dashboard</ui-icon>
           </ui-item-first-content>
           <ui-item-text-content>Dashboard</ui-item-text-content>
         </ui-nav-item>
-        <ui-nav-item @click="router.push({ name: 'History' })">
+        <ui-nav-item :href="router.resolve({ name: 'History' }).href">
           <ui-item-first-content>
             <ui-icon>history</ui-icon>
           </ui-item-first-content>
-          <ui-item-text-content>Historie</ui-item-text-content>
+          <ui-item-text-content>Verlauf</ui-item-text-content>
         </ui-nav-item>
-        <ui-nav-item @click="router.push({ name: 'Settings' })">
+        <ui-nav-item :href="router.resolve({ name: 'Settings' }).href">
           <ui-item-first-content>
             <ui-icon>settings</ui-icon>
           </ui-item-first-content>
@@ -72,7 +72,7 @@ body {
 
 .content {
   width: 100vw;
-  margin-top: 8em;
+  margin-top: 4em;
 
   display: flex;
   flex-direction: column;

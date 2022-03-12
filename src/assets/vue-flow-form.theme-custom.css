@@ -226,7 +226,7 @@ header.vff-header svg.f-logo {
 }
 
 .vff-footer .f-progress-bar-inner {
-  background-color: var(--vff-main-text-color);
+  background-color: red
 }
 
 .vff-footer .f-prev:hover,

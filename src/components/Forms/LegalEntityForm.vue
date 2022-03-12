@@ -1,8 +1,8 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 import { reactive } from 'vue';
-import FormWrapper from './FormWrapper.vue';
-import { germanLanguageModel, legalEntityQuestions } from '../questionnaires';
+import FormWrapper from '../util/CardWrapper.vue';
+import { germanLanguageModel, legalEntityQuestions } from '../../questionnaires';
 import { FlowForm, QuestionModel, QuestionType, ChoiceOption, LanguageModel } from '@ditdot-dev/vue-flow-form'
 
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setu

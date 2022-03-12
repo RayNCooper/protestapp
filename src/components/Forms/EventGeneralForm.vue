@@ -2,7 +2,7 @@
 // This starter template is using Vue 3 <script setup> SFCs
 import { reactive } from 'vue';
 import lang from "flatpickr/dist/l10n/de.js"
-import FormWrapper from './FormWrapper.vue';
+import FormWrapper from '../util/CardWrapper.vue';
 
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 const form = reactive({
