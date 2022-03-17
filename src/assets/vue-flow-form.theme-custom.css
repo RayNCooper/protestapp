@@ -260,13 +260,21 @@ header.vff-header svg.f-logo {
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --vff-bg-color: #fff;
+    --vff-main-text-color: black;
+    --vff-secondary-text-color: black;
+    --vff-tertiary-text-color: #f1f1f1;
+    --vff-main-accent-color: #0DBC79;
+    --vff-secondary-accent-color: #BBEBD5;
+  }
+  /* :root {
     --vff-bg-color: black;
     --vff-main-text-color: #fff;
     --vff-secondary-text-color: #AEB6BF;
     --vff-tertiary-text-color: #41464F;
     --vff-main-accent-color: white;
     --vff-secondary-accent-color: #A0DBC1;
-  }
+  } */
 
   header.vff-header {
     background-color: #313640;

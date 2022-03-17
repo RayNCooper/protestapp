@@ -1,22 +1,22 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { FlowForm, Question, ChoiceOption, LinkOption } from '@ditdot-dev/vue-flow-form'
 import { germanLanguageModel } from '../../languageModel';
 import { useRouter } from 'vue-router';
 import { identity } from 'lodash';
 
+const vehicleFlowForm = ref(FlowForm)
 const router = useRouter()
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-const utilityKinds = ["Plakate", "Flyer", "Pavillons", "Banner", "Megaphone", "Schirme", "Fahnen", "Lautsprecher", "Tische", "Bühnen"]
+const form = reactive({
+    comments: '',
+    covidPrecautions: ''
+})
 
 function formSubmitted(questionList: { id: string, answer: string }[]) {
 
-    const utils = questionList.map((q) => {
-        return { name: q.id, itemCount: q.answer }
-    })
-
-    router.push({ name: "EventOtherForm" })
+    router.push({ name: "GenerateForm" })
 }
 </script>
 
@@ -30,15 +30,28 @@ function formSubmitted(questionList: { id: string, answer: string }[]) {
         <template v-slot:complete>
             <div class="f-section-wrap">
                 <p>
-                    <span class="fh2">Verstanden! Als Nächstes geht es um Hilfsmittel.</span>
+                    <span class="fh2">
+                        Fertig! 🏁
+                        <br />Wir generieren jetzt dein Formular.
+                    </span>
                 </p>
             </div>
         </template>
+
         <question
-            v-for="util in utilityKinds"
-            :id="util"
-            type="number"
-            :title="'Wie viele ' + util + ' wollt ihr benutzen?'"
+            v-model="form.comments"
+            id="comments"
+            type="text"
+            title="Gibt es Anmerkungen oder Kommentare?"
+            subtitle="(optional)"
+        ></question>
+        <question
+            v-model="form.covidPrecautions"
+            id="covidPrecautions"
+            required
+            type="text"
+            title="Welches Hygienekonzept verfolgt eure Veranstaltung?"
+            placeholder="Einhaltung der Maskenpflicht, [...]"
         ></question>
     </flow-form>
 </template>

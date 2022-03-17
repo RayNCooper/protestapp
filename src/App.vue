@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import CitySelection from './components/Forms/CitySelection.vue';
 import EventGeneralForm from './components/Forms/EventGeneralForm.vue';
-import LegalEntityForm from './components/Forms/LegalEntityForm.vue';
+import LegalEntityForm from './components/Forms/EventPeopleForm.vue';
 const showDrawer = ref(false)
 const router = useRouter()
 </script>

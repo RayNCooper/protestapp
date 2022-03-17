@@ -13,18 +13,18 @@ interface ProtestEvent {
 
     /* Participation */
     participantCount: number
-    usingStewards: boolean,
+    usingStewards: boolean
     stewardCount?: number
 
     /* Vehicles */
-    usingVehicles: boolean,
-    vehicleCount?: number
+    usingVehicles: boolean
     vehicleKinds?: string
 
     /* Utilities */
-    usedUtilities: Array<ProtestUtility>
+    utilityKinds: Array<ProtestUtility>
 
     /* Other */
+    covidPrecautions: string
     comments?: string
 }
 

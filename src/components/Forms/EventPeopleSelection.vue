@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { FlowForm, Question, LinkOption, QuestionModel, QuestionType, ChoiceOption, LanguageModel } from '@ditdot-dev/vue-flow-form'
+import { FlowForm, Question, LinkOption, ChoiceOption } from '@ditdot-dev/vue-flow-form'
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { germanLanguageModel } from '../../questionnaires';
+import { germanLanguageModel } from '../../languageModel';
 
 const router = useRouter()
 
@@ -25,6 +25,7 @@ function onAnswer(questionAnswered: { answer: string, id: string }) {
 }
 function onSubmit(questionList: Array<{ answer: string, id: string }>) {
     questionList.forEach((q) => console.log(q.answer + ", " + q.id))
+    router.push({ name: "EventGeneralForm" })
 }
 </script>
 
@@ -37,12 +38,22 @@ function onSubmit(questionList: Array<{ answer: string, id: string }>) {
         :progressbar="false"
         :navigation="false"
     >
+        <template v-slot:complete>
+            <div class="f-section-wrap">
+                <p>
+                    <span
+                        class="fh2"
+                    >Fertig. Als Nächstes geht es um deine Veranstaltung.</span>
+                </p>
+            </div>
+        </template>
         <question
             id="Applicant"
             required
             type="multipleChoice"
             title="Wer meldet die Veranstaltung an?"
             :nextStepOnAnswer="true"
+            :helpTextShow="false"
             description="📌"
             :descriptionLink="[
                 new LinkOption({
@@ -53,17 +64,24 @@ function onSubmit(questionList: Array<{ answer: string, id: string }>) {
             ]"
             :options="legalEntityChoices"
         ></question>
+
         <question
             id="Organizer"
-            required
             type="multipleChoice"
             title="Wer ist der offizielle Veranstalter?"
             :nextStepOnAnswer="true"
-            description="📌"
+            tagline="''Leiter der Versammlung ist der Veranstalter. Wird die Versammlung von einer Vereinigung veranstaltet, so ist ihr Vorsitzender der Leiter.'' (§ 7 II 1,2 VersammlG)"
+            helpText=" "
+            subtitle="(optional, sonst Anmelder = Veranstalter)"
             :descriptionLink="[
                 new LinkOption({
                     url: 'https://www.gesetze-im-internet.de/versammlg/BJNR006840953.html',
-                    text: 'VersammlG (Versammlungsgesetz)', // optional, default is link url
+                    text: '📌 VersammlG (Versammlungsgesetz)', // optional, default is link url
+                    target: '_blank' // optional, default is '_blank'
+                }),
+                new LinkOption({
+                    url: 'https://www.gesetze-im-internet.de/versammlg/__7.html',
+                    text: '📌 §7 VersammlG', // optional, default is link url
                     target: '_blank' // optional, default is '_blank'
                 })
             ]"
@@ -71,7 +89,6 @@ function onSubmit(questionList: Array<{ answer: string, id: string }>) {
         ></question>
         <question
             id="Manager"
-            required
             type="multipleChoice"
             title="Wer leitet die Veranstaltung?"
             :nextStepOnAnswer="true"
