@@ -9,15 +9,13 @@ import BalmUI from 'balm-ui'; // Official Google Material Components
 import BalmUIPlus from 'balm-ui-plus'; // BalmJS Team Material Components
 import 'balm-ui-css';
 
-import firebaseConfig from "../firebase.config.json"
 import router from './router';
-const firebaseApp = initializeApp(firebaseConfig);
+import store from "./store"
 
-getAnalytics(firebaseApp);
-getAuth(firebaseApp)
 
 const app = createApp(App)
 
+app.use(store)
 app.use(router)
 
 app.use(BalmUI, {
