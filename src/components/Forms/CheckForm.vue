@@ -13,7 +13,7 @@ const router = useRouter()
 const store = useStore()
 const loading = ref(true)
 const registration = ref()
-
+const showFailedSubmitSnackbar = ref(false)
 
 const utilities = computed(() => {
     return registration.value.assembly.utilityKinds.map((utility: { name: string, itemCount: number }, i: number) => {
@@ -35,6 +35,12 @@ onBeforeMount(async () => {
         , 1000)
 })
 
+function submitForm() {
+    if (registration.value.assembly.topic && registration.value.assembly.participantCount > 0 && registration.value.assembly.covidPrecautions)
+        router.push({ name: 'GenerateForm' })
+    else showFailedSubmitSnackbar.value = true
+}
+
 </script>
 
 <template>
@@ -50,7 +56,7 @@ onBeforeMount(async () => {
     <template v-else-if="registration && !loading">
         <h2>{{ capitalize(registration.assembly.type) }}</h2>
         <card-wrapper
-            :card-title="(registration.applicant || registration.organizer || registration.manager) ? 'Assoziierte Personen' : 'Anmeldung nachholen!'"
+            card-title="Assoziierte Personen"
             action-bar-top="true"
             action-bar-top-icon="edit"
             action-bar-button-link-name="EventPeopleSelection"
@@ -112,15 +118,15 @@ onBeforeMount(async () => {
         <card-wrapper card-title="Informationen zur Veranstaltung" class="checkFormCard">
             <template #content>
                 <card-wrapper
-                    card-title="Allgemeine Information"
+                    :card-title="registration.assembly.topic ? 'Allgemeine Information' : 'Allgemeine Information (ausstehend)'"
                     action-bar-top="true"
                     action-bar-top-icon="edit"
                     action-bar-button-link-name="EventLocationSelection"
                     action-bar-headline-size="4"
                     style="border: 0;"
-                >   
+                >
                     <template v-slot:content>
-                        <ui-list :type="2">
+                        <ui-list :type="2" v-if="registration.assembly.topic">
                             <ui-item>
                                 <ui-item-text-content>
                                     <ui-item-text1>{{ capitalize(registration.location) }}</ui-item-text1>
@@ -176,7 +182,7 @@ onBeforeMount(async () => {
                     </template>
                 </card-wrapper>
                 <card-wrapper
-                    card-title="Teilnahme"
+                    :card-title="registration.assembly.participantCount > 0 ? 'Teilnahme' : 'Teilnahme (ausstehend)'"
                     action-bar-top="true"
                     action-bar-top-icon="edit"
                     action-bar-button-link-name="EventParticipationForm"
@@ -184,7 +190,7 @@ onBeforeMount(async () => {
                     style="border: 0;"
                 >
                     <template v-slot:content>
-                        <ui-list :type="2">
+                        <ui-list v-if="registration.assembly.participantCount > 0" :type="2">
                             <ui-item>
                                 <ui-item-text-content>
                                     <ui-item-text1>{{ registration.assembly.participantCount }}</ui-item-text1>
@@ -240,7 +246,7 @@ onBeforeMount(async () => {
                     style="border: 0;"
                 >
                     <template v-slot:content>
-                        <ui-list :type="2">
+                        <ui-list :type="2" v-if="utilities">
                             <ui-item>
                                 <ui-item-text-content>
                                     <ui-item-text1>{{ utilities }}</ui-item-text1>
@@ -251,7 +257,7 @@ onBeforeMount(async () => {
                     </template>
                 </card-wrapper>
                 <card-wrapper
-                    card-title="Andere"
+                    :card-title="registration.assembly.covidPrecautions ? 'Andere' : 'Andere (ausstehend)'"
                     action-bar-top="true"
                     action-bar-top-icon="edit"
                     action-bar-button-link-name="EventOtherForm"
@@ -259,7 +265,7 @@ onBeforeMount(async () => {
                     style="border: 0;"
                 >
                     <template v-slot:content>
-                        <ui-list :type="2">
+                        <ui-list :type="2" v-if="registration.assembly.covidPrecautions">
                             <ui-item>
                                 <ui-item-text-content>
                                     <ui-item-text1>{{ registration.assembly.covidPrecautions }}</ui-item-text1>
@@ -281,9 +287,15 @@ onBeforeMount(async () => {
             icon="east"
             style="margin-bottom: 2em; background-color: black; color: white;"
             raised
-            @click="router.push({ name: 'GenerateForm' })"
+            @click="submitForm"
         >Weiter</ui-button>
     </template>
+    <ui-snackbar
+        v-model="showFailedSubmitSnackbar"
+        :timeout-ms="1000"
+        message="Fehler: Anmeldung unvollständig"
+        :action-type="1"
+    ></ui-snackbar>
 </template>
 
 <style scoped>

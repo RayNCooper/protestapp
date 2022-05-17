@@ -15,12 +15,12 @@ const data = computed(() => {
   const registrations = draft.organizer?.id ? [draft, remoteRegistrations].flat() : remoteRegistrations
   console.log(registrations)
   if (registrations.length > 0) return registrations.map((r: Registration) => {
-    return { titel: r.assembly.topic, datum: r.assembly.date, teilnehmerzahl: r.assembly.participantCount, ort: capitalize(r.location), entwurf: draft.id === r.id ? "✅" : "" }
-  }); else return [{ titel: "-", datum: "-", teilnehmerzahl: "-", ort: "-", entwurf: "-" }]
+    return { titel: r.assembly.topic ? r.assembly.topic : "-", datum: r.assembly.date ? r.assembly.date : "-", teilnehmerzahl: r.assembly.participantCount ? r.assembly.participantCount : "-", anmelder: r.applicant.firstName + " " + r.applicant.lastName, ort: r.assembly.topic ? capitalize(r.location) : "-", entwurf: draft.id === r.id ? "✅" : "" }
+  }); else return [{ titel: "-", datum: "-", anmelder: "-", teilnehmerzahl: "-", ort: "-", entwurf: "-" }]
 })
 
-const thead = ['Titel der Versammlung', 'Datum', 'Anzahl der Teilnehmer', 'Ort', "Entwurf", "Aktionen"]
-const tbody = ['titel', 'datum', 'teilnehmerzahl', 'ort', 'entwurf', {
+const thead = ['Titel der Versammlung', 'Datum', 'Anzahl der Teilnehmer', 'Anmelder', 'Ort', "Entwurf", "Aktionen"]
+const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', 'entwurf', {
   slot: 'actions'
 }]
 </script>
@@ -37,7 +37,11 @@ const tbody = ['titel', 'datum', 'teilnehmerzahl', 'ort', 'entwurf', {
     <template #content>
       <ui-table style="margin-top: 2em;" fullwidth :data="data" :thead="thead" :tbody="tbody">
         <template #actions="{ data }">
-          <ui-icon v-if="data.entwurf" outlined @click="router.push({ name: 'CheckForm' })">edit</ui-icon>
+          <ui-icon
+            v-if="data.entwurf && data.entwurf !== '-'"
+            outlined
+            @click="router.push({ name: 'CheckForm' })"
+          >edit</ui-icon>
         </template>
       </ui-table>
     </template>
