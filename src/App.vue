@@ -30,12 +30,12 @@ onBeforeMount(() => {
           </ui-item-first-content>
           <ui-item-text-content>Dashboard</ui-item-text-content>
         </ui-nav-item>
-        <ui-nav-item :href="router.resolve({ name: 'History' }).href">
+       <!--  <ui-nav-item :href="router.resolve({ name: 'History' }).href">
           <ui-item-first-content>
             <ui-icon>history</ui-icon>
           </ui-item-first-content>
           <ui-item-text-content>Verlauf</ui-item-text-content>
-        </ui-nav-item>
+        </ui-nav-item> -->
         <ui-nav-item :href="router.resolve({ name: 'Settings' }).href">
           <ui-item-first-content>
             <ui-icon>settings</ui-icon>
@@ -52,9 +52,12 @@ onBeforeMount(() => {
       :type="1"
       content-selector=".app-content"
       nav-id="menu"
-      style="  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"
+      style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"
     >
-      <img src="./assets/logo_wide.png" style="height: 3em; margin-left: -1.2em; margin-top: 0.4em" />
+      <img
+        src="./assets/logo_wide.png"
+        style="height: 2.5em; margin-left: -1.2em; margin-top: 0.4em"
+      />
       <!-- <template #toolbar="{ toolbarItemClass }">
         <ui-icon-button :class="toolbarItemClass" icon="file_download"></ui-icon-button>
         <ui-icon-button :class="toolbarItemClass" icon="print"></ui-icon-button>
