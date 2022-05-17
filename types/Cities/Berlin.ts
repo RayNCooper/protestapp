@@ -1,9 +1,10 @@
-import { textChangeRangeIsUnchanged } from "typescript";
-import { Aufzug, Mahnwache, Versammlung } from "../ProtestEvent";
-import { Registration, LegalEntity } from "../Registration";
-import _, { times } from 'lodash';
+import { Aufzug, Versammlung } from "../ProtestEvent";
+import { ProtestLocations, Registration } from "../Registration";
+import { LegalEntity } from "../LegalEntity";
 
 export class BerlinVersammlungRegistration implements Registration {
+    id?: string | undefined;
+
     assembly: Aufzug | Versammlung;
     applicant: LegalEntity;
     organizer: LegalEntity;
@@ -11,11 +12,14 @@ export class BerlinVersammlungRegistration implements Registration {
 
     hasExtraOrganizer: boolean;
     hasExtraManager: boolean;
-    constructor(assembly: Aufzug | Versammlung, applicant: LegalEntity, hasExtraOrganizer: boolean, hasExtraManager: boolean, organizer: LegalEntity, manager: LegalEntity) {
+    location: ProtestLocations;
+
+    constructor(location: ProtestLocations, assembly: Aufzug | Versammlung, applicant: LegalEntity, hasExtraOrganizer: boolean, hasExtraManager: boolean, organizer: LegalEntity, manager: LegalEntity) {
         this.assembly = assembly
         this.applicant = applicant
         this.organizer = organizer
         this.manager = manager
+        this.location = location
 
         this.hasExtraOrganizer = hasExtraOrganizer
         this.hasExtraManager = hasExtraManager
@@ -56,9 +60,9 @@ export class BerlinVersammlungRegistration implements Registration {
             stewardCount: this.assembly.usingStewards ? this.assembly.stewardCount : "",
 
             /* Zubehör */
-            usingLoudspeakerPositive: this.assembly.usedUtilities.includes({ name: "Lautsprecher" }) || this.assembly.usedUtilities.includes({ name: "Megaphone" }),
-            usingLoudspeakerNegative: !(this.assembly.usedUtilities.includes({ name: "Lautsprecher" }) || this.assembly.usedUtilities.includes({ name: "Megaphone" })),
-            setupKinds: this.assembly.usedUtilities ? this.assembly.usedUtilities.flatMap((u) => u.name + ", " + u.itemCount + " Stk.; ").toString() : "",
+            usingLoudspeakerPositive: this.assembly.utilityKinds.includes({ name: "Lautsprecher" }) || this.assembly.utilityKinds.includes({ name: "Megaphone" }),
+            usingLoudspeakerNegative: !(this.assembly.utilityKinds.includes({ name: "Lautsprecher" }) || this.assembly.utilityKinds.includes({ name: "Megaphone" })),
+            setupKinds: this.assembly.utilityKinds ? this.assembly.utilityKinds.flatMap((u) => u.name + ", " + u.itemCount + " Stk.; ").toString() : "",
 
             /* Fahrzeuge */
             usingVehiclesPositive: this.assembly.usingVehicles,

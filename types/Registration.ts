@@ -1,10 +1,11 @@
 import { Aufzug, Versammlung } from "./ProtestEvent";
 import { LegalEntity } from "./LegalEntity"
+export type ProtestLocations = "Berlin" | "Köln" | "Hamburg"
 
 export interface Registration {
     id?: string
 
-    location: "Berlin" | "Köln" | "Hamburg"
+    location: ProtestLocations
 
     assembly: Aufzug | Versammlung
 

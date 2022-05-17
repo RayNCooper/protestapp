@@ -3,7 +3,7 @@ import { LegalEntity } from "types/LegalEntity"
 import { ProtestUtility, ProtestEvent } from "../../../types/ProtestEvent"
 import { ActionContext } from "vuex"
 import { RootState } from ".."
-import { Registration } from "../../../types/Registration"
+import { ProtestLocations, Registration } from "../../../types/Registration"
 
 type RegistrationModuleState = {
     draftedRegistration?: Registration
@@ -59,7 +59,7 @@ const registrationsModule = {
             state.registrations.push(payload)
         },
         addDraftedRegistrationLocation(state: RegistrationModuleState, payload: {
-            location: "Berlin" | "Köln" | "Hamburg"
+            location: ProtestLocations
         }) {
             state.draftedRegistration!.location = payload.location
         },
