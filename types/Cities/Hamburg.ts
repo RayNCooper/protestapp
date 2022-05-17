@@ -1,7 +1,7 @@
 import { Mahnwache, Versammlung, Aufzug } from "../ProtestEvent";
 import { Registration, LegalEntity } from "../Registration";
 
-class HamburgVersammlungRegistration implements Registration {
+export class HamburgVersammlungRegistration implements Registration {
     constructor(assembly: Mahnwache | Versammlung, applicant: LegalEntity, organizer: LegalEntity, manager: LegalEntity) { }
     get formMapping(): any {
         return

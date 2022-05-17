@@ -1,22 +1,12 @@
-import { Aufzug, Mahnwache, Versammlung } from "./ProtestEvent";
-
-export interface LegalEntity {
-    institutionName?: string
-    firstName: string
-    lastName: string
-    streetName: string
-    streetNumber: string
-    zipCode: string
-    location: string
-    phone: string
-    fax?: string
-    email: string
-}
+import { Aufzug, Versammlung } from "./ProtestEvent";
+import { LegalEntity } from "./LegalEntity"
 
 export interface Registration {
-    get formMapping()
+    id?: string
 
-    assembly: Aufzug | Mahnwache | Versammlung
+    location: "Berlin" | "Köln" | "Hamburg"
+
+    assembly: Aufzug | Versammlung
 
     /* 
         Aus Versammlungsgesetz §7 (https://www.gesetze-im-internet.de/versammlg/BJNR006840953.html)

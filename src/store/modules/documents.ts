@@ -1,3 +1,6 @@
+
+import { RootState } from ".."
+
 type DocumentModuleState = {
 }
 

@@ -1,17 +1,12 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth"
-
 import BalmUI from 'balm-ui'; // Official Google Material Components
 import BalmUIPlus from 'balm-ui-plus'; // BalmJS Team Material Components
 import 'balm-ui-css';
 
 import router from './router';
 import store from "./store"
-
 
 const app = createApp(App)
 

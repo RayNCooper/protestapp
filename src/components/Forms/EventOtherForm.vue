@@ -5,8 +5,10 @@ import { FlowForm, Question, ChoiceOption, LinkOption } from '@ditdot-dev/vue-fl
 import { germanLanguageModel } from '../../languageModel';
 import { useRouter } from 'vue-router';
 import { identity } from 'lodash';
+import { useStore } from 'vuex';
 
 const vehicleFlowForm = ref(FlowForm)
+const store = useStore()
 const router = useRouter()
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 const form = reactive({
@@ -15,8 +17,8 @@ const form = reactive({
 })
 
 function formSubmitted(questionList: { id: string, answer: string }[]) {
-
-    router.push({ name: "GenerateForm" })
+    store.commit("addDraftedRegistrationOther", form)
+    router.push({ name: "CheckForm" })
 }
 </script>
 

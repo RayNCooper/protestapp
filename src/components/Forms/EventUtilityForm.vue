@@ -5,18 +5,24 @@ import { FlowForm, Question, ChoiceOption, LinkOption } from '@ditdot-dev/vue-fl
 import { germanLanguageModel } from '../../languageModel';
 import { useRouter } from 'vue-router';
 import { identity } from 'lodash';
+import { useStore } from 'vuex';
+import { utilityTypes } from '../../../types/ProtestEvent';
 
 const router = useRouter()
+const store = useStore()
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-const utilityKinds = ["Plakate", "Flyer", "Pavillons", "Banner", "Megaphone", "Schirme", "Fahnen", "Lautsprecher", "Tische", "Bühnen"]
+const utilityKinds = utilityTypes
 
 function formSubmitted(questionList: { id: string, answer: string }[]) {
 
-    const utils = questionList.map((q) => {
-        return { name: q.id, itemCount: q.answer }
-    })
+    const utils = {
+        utilityKinds: questionList.map((q) => {
+            return { name: q.id, itemCount: q.answer }
+        })
+    }
+    store.commit("addDraftedRegistrationUtility", utils)
 
-    router.push({ name: "EventOtherForm" })
+    store.getters.getSkipStepState ? router.push({ name: "CheckForm" }) : router.push({ name: "EventOtherForm" })
 }
 </script>
 

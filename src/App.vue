@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import CitySelection from './components/Forms/CitySelection.vue';
-import EventGeneralForm from './components/Forms/EventGeneralForm.vue';
-import LegalEntityForm from './components/Forms/EventPeopleForm.vue';
+import { useStore } from 'vuex';
 const showDrawer = ref(false)
 const router = useRouter()
+const store = useStore()
+
+onBeforeMount(() => {
+  const jsonStorage = localStorage.getItem('draftedRegistration')
+  jsonStorage ? store.commit("setDraftedRegistration", JSON.parse(jsonStorage)) : null
+})
 </script>
 
 <template>
@@ -64,23 +68,20 @@ const router = useRouter()
 </template>
 
 <style>
-@import "vue-flow-form-css";
-@import "vue-flow-form-theme-css";
+@import "@ditdot-dev/vue-flow-form/dist/vue-flow-form.css";
+@import "./assets/vue-flow-form.theme-custom.css";
+
 body {
   margin: 0;
 }
 
 .content {
   width: 100vw;
-  margin-top: 4em;
+  margin-top: 6em;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-self: center;
-}
-
-.berlin_card_media {
-  background-image: url(./assets/berlin.jpg);
 }
 </style>

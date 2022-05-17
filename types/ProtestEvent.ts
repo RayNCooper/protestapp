@@ -1,9 +1,10 @@
-interface ProtestUtility {
-    name: "Plakate" | "Flyer" | "Pavillons" | "Banner" | "Megaphone" | "Schirme" | "Fahnen" | "Lautsprecher" | "Tische" | "Bühnen"
+export const utilityTypes = ["Plakate", "Flyer", "Pavillons", "Banner", "Megaphone", "Schirme", "Fahnen", "Lautsprecher", "Tische", "Bühnen"] as const
+export interface ProtestUtility {
+
+    name: typeof utilityTypes[number]
     itemCount?: number
 }
-
-interface ProtestEvent {
+export interface ProtestEvent {
     /* General Information */
     topic: string
     date: string
@@ -35,8 +36,4 @@ export interface Versammlung extends ProtestEvent {
 export interface Aufzug extends ProtestEvent {
     route: string
     type: "Aufzug"
-}
-
-export interface Mahnwache extends ProtestEvent {
-    type: "Mahnwache"
 }

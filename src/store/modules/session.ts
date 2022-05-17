@@ -16,6 +16,9 @@ const sessionModule = {
     actions: {
     },
     mutations: {
+        setUser(state: SessionModuleState, payload: User | null) {
+            state.user = payload
+        },
     },
 }
 

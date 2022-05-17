@@ -1,11 +1,23 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
-import { computed, reactive, ref } from 'vue';
+import { computed, onBeforeMount, reactive, ref } from 'vue';
 import { FlowForm, Question, ChoiceOption, LinkOption } from '@ditdot-dev/vue-flow-form'
 import { useRouter } from 'vue-router';
 import CardWrapper from '../util/CardWrapper.vue';
+import { useStore } from 'vuex';
+import { Registration } from '../../../types/Registration';
 
 const router = useRouter()
+const store = useStore()
+
+onBeforeMount(async () => {
+    const draftJSON = localStorage.getItem("draftedRegistration")
+    if (draftJSON) {
+        const registration = JSON.parse(draftJSON) as Registration
+        const c = await store.dispatch("callGenerateForm", registration)
+        console.log(c)
+    }
+})
 
 const loading = ref(false)
 </script>

@@ -5,8 +5,11 @@ import { FlowForm, Question, ChoiceOption, LinkOption } from '@ditdot-dev/vue-fl
 import { germanLanguageModel } from '../../languageModel';
 import { useRouter } from 'vue-router';
 import { identity } from 'lodash';
+import { useStore } from 'vuex';
+import { vehicle } from './choiceOptions';
 
 const vehicleFlowForm = ref(FlowForm)
+const store = useStore()
 const router = useRouter()
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 const form = reactive({
@@ -15,7 +18,8 @@ const form = reactive({
 })
 
 function formSubmitted(questionList: { id: string, answer: string }[]) {
-    router.push({ name: "EventUtilityForm" })
+    store.commit("addDraftedRegistrationVehicle", form)
+    store.getters.getSkipStepState ? router.push({ name: "CheckForm" }) : router.push({ name: "EventUtilityForm" })
 }
 function onStep(activeQuestionId: string, activeQuestion: any) {
     if (activeQuestionId === "vehicleEndSection")
@@ -45,7 +49,7 @@ function onStep(activeQuestionId: string, activeQuestion: any) {
             required
             :nextStepOnAnswer="true"
             type="multipleChoice"
-            :options="[new ChoiceOption({ label: 'Ja', value: true }), new ChoiceOption({ label: 'Nein', value: false })]"
+            :options="vehicle.usingVehicles"
             title="Möchtet ihr Fahrzeuge benutzen?"
         ></question>
         <question

@@ -2,7 +2,10 @@
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
-const props = defineProps(['imageSrc', 'cardTitle', 'actionBarTop', 'actionBarButtonTooltip', 'actionBarButtonLinkName'])
+const props = defineProps(['imageSrc', 'cardTitle',
+    'actionBarTop', 'actionBarTopIcon',
+    'actionBarButtonTooltip', 'actionBarButtonLinkName',
+    'actionBarButtonMini', 'actionBarHeadlineSize'])
 /* const publishedBooksMessage = computed(() => {
     return author.books.length > 0 ? 'Yes' : 'No'
 }) */
@@ -16,11 +19,16 @@ const router = useRouter()
 
         <div class="card_content">
             <div class="card_flex">
-                <h3 v-if="props.cardTitle" class="$tt('headline3')">{{ props.cardTitle }}</h3>
+                <h3
+                    v-if="props.cardTitle && !props.actionBarHeadlineSize || props.actionBarHeadlineSize == 3"
+                >{{ props.cardTitle }}</h3>
+                <h4 v-if="props.cardTitle && props.actionBarHeadlineSize == 4">{{ props.cardTitle }}</h4>
+
                 <ui-fab
                     v-if="props.actionBarTop"
+                    :mini="props.actionBarButtonMini"
                     :aria-describedby="props.actionBarButtonTooltip + '-id'"
-                    icon="add"
+                    :icon="props.actionBarTopIcon"
                     @click="router.push({ name: props.actionBarButtonLinkName })"
                 ></ui-fab>
                 <ui-tooltip

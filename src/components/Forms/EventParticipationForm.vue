@@ -1,27 +1,32 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import lang from "flatpickr/dist/l10n/de.js"
 import { FlowForm, Question, ChoiceOption, LinkOption, MaskPresets } from '@ditdot-dev/vue-flow-form'
 import { germanLanguageModel } from '../../languageModel';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { participation } from './choiceOptions';
 
 const router = useRouter()
+const store = useStore()
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 const form = reactive({
     participantCount: 0,
     usingStewards: false,
     stewardCount: 0
 })
+const participationFlowform: any = ref(null)
 
 function formSubmitted() {
-    router.push({ name: "EventVehicleForm" })
+    store.commit("addDraftedRegistrationParticipation", form)
+    store.getters.getSkipStepState ? router.push({ name: "CheckForm" }) : router.push({ name: "EventVehicleForm" })
 }
 </script>
 
 <template>
     <flow-form
-        ref="participation_flowform"
+        ref="participationFlowform"
         :timer="true"
         :standalone="true"
         @submit="formSubmitted"
@@ -53,7 +58,7 @@ function formSubmitted() {
                 type="button"
                 href="#"
                 aria-label="ok"
-                @click="this.$refs.participation_flowform.reset()"
+                @click="participationFlowform.reset()"
             >
                 <span>zurücksetzen</span>
             </button>
@@ -75,16 +80,7 @@ function formSubmitted() {
             required
             type="multipleChoice"
             :nextStepOnAnswer="true"
-            :options="[
-                new ChoiceOption({
-                    label: 'Ja',
-                    value: true
-                }),
-                new ChoiceOption({
-                    label: 'Nein',
-                    value: false
-                })
-            ]"
+            :options="participation.usingStewards"
             title="Werdet ihr Ordner einsetzen?"
         ></question>
         <question

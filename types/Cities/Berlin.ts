@@ -4,14 +4,14 @@ import { Registration, LegalEntity } from "../Registration";
 import _, { times } from 'lodash';
 
 export class BerlinVersammlungRegistration implements Registration {
-    assembly: Aufzug | Mahnwache | Versammlung;
+    assembly: Aufzug | Versammlung;
     applicant: LegalEntity;
-    organizer?: LegalEntity;
-    manager?: LegalEntity;
+    organizer: LegalEntity;
+    manager: LegalEntity;
 
     hasExtraOrganizer: boolean;
     hasExtraManager: boolean;
-    constructor(assembly: Aufzug | Mahnwache | Versammlung, applicant: LegalEntity, hasExtraOrganizer: boolean, hasExtraManager: boolean, organizer?: LegalEntity, manager?: LegalEntity) {
+    constructor(assembly: Aufzug | Versammlung, applicant: LegalEntity, hasExtraOrganizer: boolean, hasExtraManager: boolean, organizer: LegalEntity, manager: LegalEntity) {
         this.assembly = assembly
         this.applicant = applicant
         this.organizer = organizer

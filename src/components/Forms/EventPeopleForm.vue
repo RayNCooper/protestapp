@@ -4,11 +4,14 @@ import { reactive } from 'vue';
 import { germanLanguageModel } from '../../languageModel';
 import { FlowForm, Question, } from '@ditdot-dev/vue-flow-form'
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import { LegalEntity } from '../../../types/LegalEntity';
 
 const router = useRouter()
+const store = useStore()
 
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setu
-const form = reactive({
+const form = reactive<LegalEntity>({
     institutionName: "",
     firstName: "",
     lastName: "",
@@ -21,7 +24,9 @@ const form = reactive({
     fax: "",
 })
 
-function formSubmitted(questionList: Array<{ id: string, answer: string }>) {
+async function formSubmitted(questionList: Array<{ id: string, answer: string }>) {
+    await store.dispatch('createLegalEntity', { ...form })
+
     router.push({ name: "EventPeopleSelection" })
 }
 </script>
