@@ -5,6 +5,7 @@ import { useStore } from "vuex";
 import * as firebaseui from "firebaseui"
 import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
 import { useRouter } from "vue-router";
+import logoLarge from "../../assets/logo_large.png"
 
 const router = useRouter()
 const store = useStore()
@@ -42,7 +43,7 @@ onMounted(() => {
     <card-wrapper style="width: 20em">
         <template #content>
             <img
-                src="../../assets/logo_large.png"
+                :src="logoLarge"
                 style="height: 10em; display: block; margin-left: auto; margin-right: auto;"
                 alt="Logo"
             />

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { FlowForm } from "@ditdot-dev/vue-flow-form"
 import store from "../store/index"
 import routes from "./routes";
 
