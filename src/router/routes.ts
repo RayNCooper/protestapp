@@ -1,3 +1,4 @@
+import Landing from "../components/Landing.vue"
 import Dashboard from "../components/Dashboard/Dashboard.vue"
 import History from "../components/History/History.vue"
 import LegalEntityForm from "../components/Forms/EventPeopleForm.vue"
@@ -16,7 +17,7 @@ import ResetPassword from "../components/Login/ResetPassword.vue"
 
 const routes = [
     /* { path: "*", component: NotFoundComponent, name: "Not Found" }, */
-    { path: "/", name: "Root", redirect: { name: "Dashboard" } },
+    { path: "/", component: Landing, name: "Landing" },
     { path: "/login", component: History, name: "Login" },
     { path: "/dashboard", component: Dashboard, name: "Dashboard" },
     { path: "/verlauf", component: History, name: "History" },

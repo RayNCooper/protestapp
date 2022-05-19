@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import logoLarge from "./assets/logo_large.png"
@@ -8,6 +8,13 @@ import logoWide from "./assets/logo_wide.png"
 const showDrawer = ref(false)
 const router = useRouter()
 const store = useStore()
+
+const contentClass = computed(() => {
+  var cssClass = "content"
+  if (router.currentRoute.value.name === "Landing") cssClass += " svgBackground landing"
+  if (router.currentRoute.value.name != "Landing") cssClass += " center"
+  return cssClass
+})
 
 onBeforeMount(() => {
   const jsonStorage = localStorage.getItem('draftedRegistration')
@@ -61,7 +68,7 @@ onBeforeMount(() => {
         <ui-icon-button :class="toolbarItemClass" icon="bookmark"></ui-icon-button>
       </template>-->
     </ui-top-app-bar>
-    <div class="content">
+    <div :class="contentClass">
       <router-view></router-view>
     </div>
   </ui-drawer-app-content>
@@ -77,11 +84,20 @@ body {
 
 .content {
   width: 100vw;
-  margin-top: 6em;
-
+  margin-top: 3.5em;
+}
+.center {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-self: center;
+}
+.svgBackground {
+  background-image: url(./assets/wave.svg);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+.landing {
+  padding-top: 2em;
 }
 </style>

@@ -19,6 +19,8 @@ const router = useRouter()
 
         <div class="card_content">
             <div class="card_flex">
+                <h1 v-if="props.cardTitle && props.actionBarHeadlineSize == 1">{{ props.cardTitle }}</h1>
+                <h2 v-if="props.cardTitle && props.actionBarHeadlineSize == 2">{{ props.cardTitle }}</h2>
                 <h3
                     v-if="props.cardTitle && !props.actionBarHeadlineSize || props.actionBarHeadlineSize == 3"
                 >{{ props.cardTitle }}</h3>

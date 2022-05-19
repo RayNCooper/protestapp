@@ -8,7 +8,7 @@ export const peopleSelection = {
             target: '_blank' // optional, default is '_blank'
         }),
         new LinkOption({
-            url: 'https://www.google.com/',
+            url: "/einstellungen",
             text: '🗑   Personen löschen', // optional, default is link url
             target: '_blank' // optional, default is '_blank'
         })
