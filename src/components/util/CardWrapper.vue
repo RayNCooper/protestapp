@@ -46,10 +46,9 @@ const router = useRouter()
 
 <style>
 .card_container {
-    border: 1px solid #eaeaea;
-    border-radius: 0.5em;
     margin-bottom: 1em;
     margin-top: 1em;
+    border-radius: 0.5em;
 }
 .card_media {
     object-fit: cover;
@@ -69,5 +68,11 @@ const router = useRouter()
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+@media (min-width: 820px) {
+    .card_container {
+        border: 1px solid #eaeaea;
+    }
 }
 </style>
