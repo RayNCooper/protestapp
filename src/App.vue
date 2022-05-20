@@ -11,7 +11,7 @@ const store = useStore()
 
 const contentClass = computed(() => {
   var cssClass = "content"
-  if (router.currentRoute.value.name === "Landing") cssClass += " svgBackground landing"
+  if (router.currentRoute.value.name === "Landing") cssClass += " svgBackground landing center"
   if (router.currentRoute.value.name != "Landing") cssClass += " center"
   return cssClass
 })
@@ -53,7 +53,9 @@ onBeforeMount(() => {
     </ui-drawer-content>
   </ui-drawer>
   <!-- Content -->
-  <ui-drawer-app-content>
+  <ui-drawer-app-content
+    :style="router.currentRoute.value.name === 'Landing' ? 'overflow:hidden' : ''"
+  >
     <!-- App bar -->
     <ui-top-app-bar
       :type="1"
@@ -84,6 +86,7 @@ body {
 
 .content {
   width: 100vw;
+  height: 100%;
   margin-top: 3.5em;
 }
 .center {
@@ -93,9 +96,9 @@ body {
   justify-self: center;
 }
 .svgBackground {
-  background-image: url(./assets/wave.svg);
+  background-image: url(./assets/protest.jpg);
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
 }
 .landing {
   padding-top: 2em;

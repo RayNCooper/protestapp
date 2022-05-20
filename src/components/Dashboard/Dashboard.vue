@@ -27,7 +27,7 @@ const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', 'entwurf',
 
 <template>
   <card-wrapper
-    card-title="Aktuelle Protestveranstaltungen"
+    card-title="Deine Protestveranstaltungen"
     action-bar-top="true"
     action-bar-top-icon="add"
     action-bar-button-tooltip="Neue Anmeldung nach VersammlG erstellen"
