@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router';
 const props = defineProps(['imageSrc', 'cardTitle',
     'actionBarTop', 'actionBarTopIcon',
     'actionBarButtonTooltip', 'actionBarButtonLinkName',
-    'actionBarButtonMini', 'actionBarHeadlineSize'])
+    'actionBarButtonMini', 'actionBarHeadlineSize', 'actionBarButtonCSSId'])
 /* const publishedBooksMessage = computed(() => {
     return author.books.length > 0 ? 'Yes' : 'No'
 }) */
@@ -30,6 +30,7 @@ const router = useRouter()
                     v-if="props.actionBarTop"
                     :mini="props.actionBarButtonMini"
                     :aria-describedby="props.actionBarButtonTooltip + '-id'"
+                    :id="props.actionBarButtonCSSId"
                     :icon="props.actionBarTopIcon"
                     @click="router.push({ name: props.actionBarButtonLinkName })"
                 ></ui-fab>

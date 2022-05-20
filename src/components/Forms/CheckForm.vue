@@ -54,7 +54,7 @@ function submitForm() {
         >Zur Startseite</router-link>
     </template>
     <template v-else-if="registration && !loading">
-        <h2>{{ capitalize(registration.assembly.type) }}</h2>
+        <h2 style="margin-top: 2em">{{ capitalize(registration.assembly.type) }}</h2>
         <card-wrapper
             card-title="Assoziierte Personen"
             action-bar-top="true"
@@ -285,7 +285,7 @@ function submitForm() {
         </card-wrapper>
         <ui-button
             icon="east"
-            style="margin-bottom: 2em; background-color: black; color: white;"
+            style="margin-bottom: 2em; background-color: black; color: white; height: 3em;"
             raised
             @click="submitForm"
         >Weiter</ui-button>

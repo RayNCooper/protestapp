@@ -86,7 +86,6 @@ body {
 
 .content {
   width: 100vw;
-  height: 100%;
   margin-top: 3.5em;
 }
 .center {
@@ -96,6 +95,7 @@ body {
   justify-self: center;
 }
 .svgBackground {
+  height: 100%;
   background-image: url(./assets/protest.jpg);
   background-repeat: no-repeat;
   background-size: cover;

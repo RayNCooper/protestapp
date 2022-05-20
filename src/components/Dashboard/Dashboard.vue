@@ -13,7 +13,7 @@ const data = computed(() => {
   const draft = store.getters.getDraftedRegistration as Registration
   const remoteRegistrations = store.getters.getRegistrations as Registration[]
   const registrations = draft.organizer?.id ? [draft, remoteRegistrations].flat() : remoteRegistrations
-  console.log(registrations)
+
   if (registrations.length > 0) return registrations.map((r: Registration) => {
     return { titel: r.assembly.topic ? r.assembly.topic : "-", datum: r.assembly.date ? r.assembly.date : "-", teilnehmerzahl: r.assembly.participantCount ? r.assembly.participantCount : "-", anmelder: r.applicant.firstName + " " + r.applicant.lastName, ort: r.assembly.topic ? capitalize(r.location) : "-", entwurf: draft.id === r.id ? "✅" : "" }
   }); else return [{ titel: "-", datum: "-", anmelder: "-", teilnehmerzahl: "-", ort: "-", entwurf: "-" }]
@@ -32,10 +32,50 @@ const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', 'entwurf',
     action-bar-top-icon="add"
     action-bar-button-tooltip="Neue Anmeldung nach VersammlG erstellen"
     action-bar-button-link-name="EventPeopleSelection"
-    style="width: 95%"
+    action-bar-button-c-s-s-id="dashboardFab"
+    style="width: 95%; margin-top: 2em;"
   >
     <template #content>
-      <ui-table style="margin-top: 2em;" fullwidth :data="data" :thead="thead" :tbody="tbody">
+      <ui-collapse
+        v-for="reg, i in data"
+        :key="i + reg.titel"
+        with-icon
+        ripple
+        class="dashboardCollapse"
+      >
+        <template #toggle>
+          <div
+            class="tet"
+            style="font-size: larger; font-weight: 500; padding-bottom: 1em; padding-top: 1em;"
+          >
+            {{
+              reg.entwurf ? '🚧 ' + reg.titel : reg.titel
+            }}
+          </div>
+        </template>
+        <div class="dashboardCollapseContent">
+          <p style="margin-top: 0em; font-weight: 400;font-size: large">
+            🙋
+            <span style="padding-left:0.5em">{{ reg.anmelder }}</span>
+          </p>
+          <p style="font-weight: 400; font-size: large;">
+            📅
+            <span style="padding-left:0.5em">{{ reg.datum }}</span>
+          </p>
+          <p style="font-weight: 400;font-size: large;">
+            🏠
+            <span style="padding-left:0.5em">{{ reg.ort }}</span>
+          </p>
+          <ui-button
+            v-if="reg.entwurf"
+            style="background-color: white;  color: green; width: 100%; height: 3em;"
+            raised
+            icon="attach_file"
+            @click="$router.push({ name: 'CheckForm' })"
+          >Zum Formular</ui-button>
+        </div>
+      </ui-collapse>
+      <ui-table class="dashboardTable" fullwidth :data="data" :thead="thead" :tbody="tbody">
         <template #actions="{ data }">
           <ui-icon
             v-if="data.entwurf && data.entwurf !== '-'"
@@ -49,4 +89,43 @@ const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', 'entwurf',
 </template>
 
 <style>
+@media (min-width: 820px) {
+  .dashboardCollapse {
+    display: none;
+  }
+  .dashboardTable {
+    margin-top: 2em;
+  }
+}
+@media (max-width: 820px) {
+  .dashboardTable {
+    display: none;
+  }
+  .dashboardCollapse {
+    font-size: large;
+  }
+  #dashboardFab {
+    position: fixed;
+    height: 5em;
+    width: 5em;
+    right: 2em;
+    bottom: 2em;
+    z-index: 100;
+  }
+  .mdc-collapse__header {
+    background-color: rgba(53, 199, 143, 0.3);
+    border-radius: 0.5em;
+    font-size: medium;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+  .dashboardCollapseContent {
+    background-color: rgba(53, 199, 143, 0.1);
+    border-radius: 0.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    padding-top: 2em;
+    padding-bottom: 1em;
+  }
+}
 </style>
