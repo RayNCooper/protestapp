@@ -70,15 +70,15 @@ onBeforeMount(() => {
       <template #toolbar="{ toolbarItemClass }">
         <ui-tooltip
           id="authStateTooltip"
-          style="width: 8em"
+          style="width: 12em"
         >{{ store.getters.getUser ? `Eingeloggt als ${store.getters.getUser.email}` : "Nicht eingeloggt" }}</ui-tooltip>
         <ui-icon-button
           v-if="store.getters.getUser"
-          disabled
           aria-describedby="authStateTooltip"
           :class="toolbarItemClass"
           style="color: green"
           icon="person_outline"
+          @click="router.push({ name: 'Login' })"
         ></ui-icon-button>
         <ui-icon-button
           v-else-if="!store.getters.getUser"
@@ -86,7 +86,7 @@ onBeforeMount(() => {
           :class="toolbarItemClass"
           style="color: red"
           icon="lock_outline"
-          @click="router.push({name: 'Login'})"
+          @click="router.push({ name: 'Login' })"
         ></ui-icon-button>
       </template>
     </ui-top-app-bar>

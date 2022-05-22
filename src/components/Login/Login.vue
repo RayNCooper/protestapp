@@ -3,7 +3,7 @@ import { onBeforeMount, onMounted } from "vue";
 import CardWrapper from "../util/CardWrapper.vue";
 import { useStore } from "vuex";
 import * as firebaseui from "firebaseui"
-import { EmailAuthProvider, GoogleAuthProvider } from "firebase/auth";
+import { EmailAuthProvider, getAuth, GoogleAuthProvider, signOut } from "firebase/auth";
 import { useRouter } from "vue-router";
 import logoLarge from "../../assets/logo_large.png"
 
@@ -12,7 +12,7 @@ const store = useStore()
 onMounted(() => {
     var ui = new firebaseui.auth.AuthUI(store.state.firebaseAuth);
 
-    ui.start('#firebaseui-auth-container', {
+    if (!store.getters.getUser) ui.start('#firebaseui-auth-container', {
         signInOptions: [
             GoogleAuthProvider.PROVIDER_ID,
             EmailAuthProvider.PROVIDER_ID
@@ -34,9 +34,21 @@ onMounted(() => {
         }
         // Other config options...
     });
-
-
 })
+
+async function logOut() {
+    const auth = getAuth();
+    signOut(auth)
+        .then(() => {
+            store.commit("setUser", null);
+            localStorage.clear()
+            router.push({ name: "Login" });
+            router.go(0)
+        })
+        .catch((error) => {
+            process.env.NODE_ENV == "development" && console.log(error);
+        });
+}
 </script>
 
 <template>
@@ -48,6 +60,15 @@ onMounted(() => {
                 alt="Logo"
             />
             <div id="firebaseui-auth-container"></div>
+            <div style="display: flex;justify-content: center">
+                <ui-button
+                    v-if="store.getters.getUser"
+                    icon="lock_outline"
+                    style=" background-color: red; color: white; height: 3em; width: 100%; margin-top: 1em;"
+                    raised
+                    @click="logOut"
+                >Ausloggen</ui-button>
+            </div>
         </template>
     </card-wrapper>
 </template>
