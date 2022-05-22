@@ -7,28 +7,32 @@ import 'balm-ui-css';
 
 import router from './router';
 import store from "./store"
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-const app = createApp(App)
+const auth = getAuth()
+onAuthStateChanged(auth, async (user) => {
+    store.commit("setUser", user);
+    const app = createApp(App)
 
-app.use(store)
-app.use(router)
+    app.use(store)
+    app.use(router)
+    app.use(BalmUI, {
+        $theme: {
+            primary: "white",
+            secondary: "black",
+            background: "white",
+            surface: "white",
+            error: "red",
+            "on-primary": "black",
+            "on-secondary": "white",
+            "on-surface": "black",
+            "on-error": "white",
+        }
+    });
+    app.use(BalmUIPlus)
 
-app.use(BalmUI, {
-    $theme: {
-        primary: "white",
-        secondary: "black",
-        background: "white",
-        surface: "white",
-        error: "red",
-        "on-primary": "black",
-        "on-secondary": "white",
-        "on-surface": "black",
-        "on-error": "white",
-    }
+    app.mount('#app')
 });
-app.use(BalmUIPlus)
-
-app.mount('#app')
 
 
 

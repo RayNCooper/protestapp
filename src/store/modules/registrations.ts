@@ -1,6 +1,6 @@
-import { addDoc, collection, getDocs } from "firebase/firestore"
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore"
 import { LegalEntity } from "types/LegalEntity"
-import { ProtestUtility, ProtestEvent } from "../../../types/ProtestEvent"
+import { ProtestUtility } from "../../../types/ProtestEvent"
 import { ActionContext } from "vuex"
 import { RootState } from ".."
 import { ProtestLocations, Registration } from "../../../types/Registration"
@@ -35,20 +35,29 @@ const registrationsModule = {
         getSkipStepState: (state: RegistrationModuleState) => { return state.enableStepSkip }
     },
     actions: {
-        async setProtestEventsState(
+        async setRegistrationsState(
             context: ActionContext<RegistrationModuleState, RootState>,
         ) {
-            context.commit("clearProtestEvents")
-            const db = context.rootState.firebaseFirestore
-            /* const uid = context.getters.getUser.uid */
+            if (context.getters.getUser) {
+                context.commit("clearRegistrations")
+                const db = context.rootState.firebaseFirestore
+                const uid = context.getters.getUser.uid
 
-            const querySnapshot = await getDocs(collection(db, "protestEvents"));
-            const protestEvents = querySnapshot.docs.flatMap((event: any) => { return { id: event.id, ...event.data() } })
-            context.commit("addProtestEvents", protestEvents)
+                const registrationsRef = collection(db, "registrations");
+                const q = query(registrationsRef, where("read", "==", uid));
+                const querySnapshot = await getDocs(q);
+
+                const registrations = querySnapshot.docs.flatMap((event: any) => { return { id: event.id, ...event.data() } })
+                context.commit("addRegistrations", registrations)
+            }
         },
-        async createProtestEvent(context: ActionContext<RegistrationModuleState, RootState>, payload: ProtestEvent) {
-            const event = await addDoc(collection(context.rootState.firebaseFirestore, "protestEvents"), payload);
-            context.commit("addProtestEvent", event)
+        async createRegistration(context: ActionContext<RegistrationModuleState, RootState>, payload: Registration) {
+            const user = context.getters.getUser
+            if (user) {
+                const event = await addDoc(collection(context.rootState.firebaseFirestore, "registrations"), { ...payload, read: context.getters.getUser.uid });
+                context.commit("addRegistration", event)
+            } else context.commit("addRegistration", { ...payload, id: Date.now().toString() })
+
         },
     },
     mutations: {

@@ -26,7 +26,6 @@ const utilities = computed(() => {
 })
 
 onBeforeMount(async () => {
-    await store.dispatch("setLegalEntititiesState")
     const draftJSON = localStorage.getItem("draftedRegistration")
     if (draftJSON) {
         registration.value = JSON.parse(draftJSON) as Registration

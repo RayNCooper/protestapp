@@ -4,7 +4,6 @@ import { Registration } from "../../types/Registration";
 import { BerlinVersammlungRegistration } from "../../types/Cities/Berlin"
 import { PDFDocument } from "pdf-lib";
 
-
 var fs = require('fs');
 const db = getFirestore();
 

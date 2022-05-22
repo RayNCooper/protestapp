@@ -1,5 +1,4 @@
-const { BerlinVersammlungRegistration } = require("../types/Cities/Berlin");
-
+import { BerlinVersammlungRegistration } from "../types/Cities/Berlin";
 const { degrees, PDFDocument, rgb, StandardFonts, FieldExistsAsNonTerminalError } = require('pdf-lib');
 var fs = require('fs');
 
@@ -11,6 +10,7 @@ async function main() {
     const existingPdfBytes = fs.readFileSync('test.pdf', "base64")
 
     const registration = new BerlinVersammlungRegistration(
+        location: "berlin",
         { type: "Versammlung", topic: "Protest gegen Alles", date: "12.03.2022", startTime: "12:00", endTime: "16:00", location: "Zentralplatz", participantCount: 200, usingStewards: false, usingVehicles: false, usedUtilities: [{ name: "Megaphone", itemCount: 1 }], comments: "Das ist ein Kommentar - Dieses Formular wurde automatisch generiert mittels deinprotest.net" },
         { institutionName: "Greenpeace", firstName: "Peter", lastName: "Lustig", streetName: "Sesamstrasse", streetNumber: "12", zipCode: "12345", location: "Downtown", phone: "0123/4567", email: "peter.lustig@mail.de" },
         false,

@@ -24,17 +24,26 @@ const legalEntitiesModule = {
         async setLegalEntititiesState(
             context: ActionContext<LegalEntitiesModuleState, RootState>,
         ) {
-            context.commit("clearLegalEntities")
-            const db = context.rootState.firebaseFirestore
-            /* const uid = context.getters.getUser.uid */
+            if (context.getters.getUser) {
+                context.commit("clearLegalEntities")
+                const db = context.rootState.firebaseFirestore
+                const uid = context.getters.getUser.uid
 
-            const querySnapshot = await getDocs(collection(db, "legalEntities"));
-            const legalEntities = querySnapshot.docs.flatMap((entity: any) => { return { id: entity.id, ...entity.data() } })
-            context.commit("addLegalEntities", legalEntities)
+                const entitiesRef = collection(db, "legalEntities");
+                const q = query(entitiesRef, where("read", "==", uid));
+                const querySnapshot = await getDocs(q);
+
+                const legalEntities = querySnapshot.docs.flatMap((entity: any) => { return { id: entity.id, ...entity.data() } })
+                context.commit("addLegalEntities", legalEntities)
+            }
         },
         async createLegalEntity(context: ActionContext<LegalEntitiesModuleState, RootState>, payload: LegalEntity) {
-            const entity = await addDoc(collection(context.rootState.firebaseFirestore, "legalEntities"), payload);
-            context.commit("addLegalEntity", entity)
+            if (context.getters.getUser) {
+                const entity = await addDoc(collection(context.rootState.firebaseFirestore, "legalEntities"), { ...payload, read: context.getters.getUser.uid });
+                context.commit("addLegalEntity", entity)
+            } else {
+                context.commit("addLegalEntity", { ...payload, id: Date.now().toString() })
+            }
         }
     },
     mutations: {

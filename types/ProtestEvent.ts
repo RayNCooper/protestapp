@@ -1,6 +1,5 @@
 export const utilityTypes = ["Plakate", "Flyer", "Pavillons", "Banner", "Megaphone", "Schirme", "Fahnen", "Lautsprecher", "Tische", "Bühnen"] as const
 export interface ProtestUtility {
-
     name: typeof utilityTypes[number]
     itemCount?: number
 }

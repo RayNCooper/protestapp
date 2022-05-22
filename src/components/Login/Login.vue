@@ -21,11 +21,11 @@ onMounted(() => {
         signInSuccessUrl: router.resolve({ name: "Dashboard" }).fullPath,
         callbacks: {
             signInSuccessWithAuthResult: function (authResult, redirectUrl) {
-                console.log(authResult.user)
-                store.commit("setUser", authResult.getUser())
+                store.commit("setUser", authResult.user)
                 // User successfully signed in.
                 // Return type determines whether we continue the redirect automatically
                 // or whether we leave that to developer to handle.
+                router.push({ name: "Dashboard" })
                 return true;
             },
             signInFailure: function (error) {

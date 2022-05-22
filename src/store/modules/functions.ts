@@ -10,8 +10,6 @@ type FunctionModuleState = {
 const functionsModule = {
     state: (): FunctionModuleState => ({
     }),
-    getters: {
-    },
     actions: {
         async callGenerateForm(context: ActionContext<FunctionModuleState, RootState>, payload: { registration: Registration }) {
             const functions = getFunctions(getApp())

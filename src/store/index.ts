@@ -13,6 +13,7 @@ import { functionsModule } from "./modules/functions";
 import { sessionModule } from "./modules/session";
 import { legalEntitiesModule } from "./modules/legalEntities";
 import { registrationsModule } from "./modules/registrations";
+import { LegalEntity } from "types/LegalEntity";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -39,22 +40,27 @@ const store = createStore({
 store.subscribe((mutation, state) => {
   // Store the state object as a JSON string
   if (mutation.type.includes("addDraftedRegistration")) {
-    const jsonStorage = localStorage.getItem('draftedRegistration')
-
-    if (jsonStorage) {
-      const parsedStorage = JSON.parse(jsonStorage)
+    const draftedRegJson = localStorage.getItem('draftedRegistration')
+    if (draftedRegJson) {
+      const parsedDraftRegJson = JSON.parse(draftedRegJson)
 
       if (mutation.type.includes("addDraftedRegistrationPeople") || mutation.type.includes("addDraftedRegistrationLocation")) {
-        Object.keys(mutation.payload).forEach((key: string) => parsedStorage[key] = mutation.payload[key])
+        Object.keys(mutation.payload).forEach((key: string) => parsedDraftRegJson[key] = mutation.payload[key])
       } else {
-        Object.keys(mutation.payload).forEach((key: string) => parsedStorage.assembly[key] = mutation.payload[key])
+        Object.keys(mutation.payload).forEach((key: string) => parsedDraftRegJson.assembly[key] = mutation.payload[key])
       }
 
-      localStorage.setItem('draftedRegistration', JSON.stringify(parsedStorage))
+      localStorage.setItem('draftedRegistration', JSON.stringify(parsedDraftRegJson))
     } else
       localStorage.setItem('draftedRegistration', JSON.stringify(store.getters.getDraftedRegistration))
-
-
+  } else if (mutation.type.includes("addLegalEntity") && !store.getters.getUser) {
+    const legalEntJson = localStorage.getItem("legalEntities")
+    if (legalEntJson) {
+      const parsedLegalEntJson = JSON.parse(legalEntJson) as LegalEntity[]
+      parsedLegalEntJson.push(mutation.payload)
+      localStorage.setItem('legalEntities', JSON.stringify(parsedLegalEntJson))
+    } else
+      localStorage.setItem('legalEntities', JSON.stringify(store.getters.getLegalEntities))
   }
 })
 export default store

@@ -17,8 +17,11 @@ const contentClass = computed(() => {
 })
 
 onBeforeMount(() => {
-  const jsonStorage = localStorage.getItem('draftedRegistration')
-  jsonStorage ? store.commit("setDraftedRegistration", JSON.parse(jsonStorage)) : null
+  const draftedRegJson = localStorage.getItem('draftedRegistration')
+  const legalEntJson = localStorage.getItem('legalEntities')
+  console.log(store.getters.getUser)
+  if (draftedRegJson) store.commit("setDraftedRegistration", JSON.parse(draftedRegJson))
+  if (legalEntJson) store.commit("addLegalEntities", JSON.parse(legalEntJson))
 })
 </script>
 
@@ -64,11 +67,28 @@ onBeforeMount(() => {
       style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"
     >
       <img :src="logoWide" style="height: 2.5em; margin-left: -1.2em; margin-top: 0.4em" />
-      <!-- <template #toolbar="{ toolbarItemClass }">
-        <ui-icon-button :class="toolbarItemClass" icon="file_download"></ui-icon-button>
-        <ui-icon-button :class="toolbarItemClass" icon="print"></ui-icon-button>
-        <ui-icon-button :class="toolbarItemClass" icon="bookmark"></ui-icon-button>
-      </template>-->
+      <template #toolbar="{ toolbarItemClass }">
+        <ui-tooltip
+          id="authStateTooltip"
+          style="width: 8em"
+        >{{ store.getters.getUser ? `Eingeloggt als ${store.getters.getUser.email}` : "Nicht eingeloggt" }}</ui-tooltip>
+        <ui-icon-button
+          v-if="store.getters.getUser"
+          disabled
+          aria-describedby="authStateTooltip"
+          :class="toolbarItemClass"
+          style="color: green"
+          icon="person_outline"
+        ></ui-icon-button>
+        <ui-icon-button
+          v-else-if="!store.getters.getUser"
+          aria-describedby="authStateTooltip"
+          :class="toolbarItemClass"
+          style="color: red"
+          icon="lock_outline"
+          @click="router.push({name: 'Login'})"
+        ></ui-icon-button>
+      </template>
     </ui-top-app-bar>
     <div :class="contentClass">
       <router-view></router-view>
@@ -96,7 +116,7 @@ body {
 }
 .svgBackground {
   height: 100%;
-  background-image: url(./assets/protest.jpg);
+  background-image: url(./assets/protest1.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
 }

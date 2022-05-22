@@ -2,12 +2,16 @@
 import { Registration } from "../../../types/Registration";
 import { useStore } from "vuex";
 import CardWrapper from "../util/CardWrapper.vue";
-import { computed } from "vue";
+import { computed, onBeforeMount } from "vue";
 import { capitalize } from "lodash";
 import { useRouter } from "vue-router";
 
 const store = useStore()
 const router = useRouter()
+
+onBeforeMount(async () => {
+  await store.dispatch("setRegistrationsState")
+})
 
 const data = computed(() => {
   const draft = store.getters.getDraftedRegistration as Registration
@@ -46,46 +50,42 @@ const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', 'entwurf',
     style="width: 95%; margin-top: 2em;"
   >
     <template #content>
-      <ui-collapse
-        v-if="collapseData.length > 0"
-        v-for="reg, i in collapseData"
-        :key="i + reg.titel"
-        with-icon
-        ripple
-        class="dashboardCollapse"
-      >
-        <template #toggle>
-          <div
-            class="tet"
-            style="font-size: larger; font-weight: 500; padding-bottom: 1em; padding-top: 1em;"
-          >
-            {{
-              reg.entwurf ? '🚧 ' + reg.titel : reg.titel
-            }}
+      <template v-if="collapseData.length > 0" v-for="(reg, i) in collapseData">
+        <ui-collapse v-if="reg" :key="i + reg.titel" with-icon ripple class="dashboardCollapse">
+          <template #toggle>
+            <div
+              class="tet"
+              style="font-size: larger; font-weight: 500; padding-bottom: 1em; padding-top: 1em;"
+            >
+              {{
+                reg.entwurf ? '🚧 ' + reg.titel : reg.titel
+              }}
+            </div>
+          </template>
+          <div class="dashboardCollapseContent">
+            <p style="margin-top: 0em; font-weight: 400;font-size: medium">
+              🚩
+              <span style="padding-left:0.5em; font-size: small;">{{ reg.anmelder }}</span>
+            </p>
+            <p style="font-weight: 400; font-size: medium;">
+              📅
+              <span style="padding-left:0.5em">{{ reg.datum }}</span>
+            </p>
+            <p style="font-weight: 400;font-size: medium;">
+              🏠
+              <span style="padding-left:0.5em">{{ reg.ort }}</span>
+            </p>
+            <ui-button
+              v-if="reg.entwurf"
+              style="background-color: white;  color: green; width: 100%; height: 3em;"
+              raised
+              icon="attach_file"
+              @click="$router.push({ name: 'CheckForm' })"
+            >Zur Übersicht</ui-button>
           </div>
-        </template>
-        <div class="dashboardCollapseContent">
-          <p style="margin-top: 0em; font-weight: 400;font-size: medium">
-            🚩
-            <span style="padding-left:0.5em; font-size: small;">{{ reg.anmelder }}</span>
-          </p>
-          <p style="font-weight: 400; font-size: medium;">
-            📅
-            <span style="padding-left:0.5em">{{ reg.datum }}</span>
-          </p>
-          <p style="font-weight: 400;font-size: medium;">
-            🏠
-            <span style="padding-left:0.5em">{{ reg.ort }}</span>
-          </p>
-          <ui-button
-            v-if="reg.entwurf"
-            style="background-color: white;  color: green; width: 100%; height: 3em;"
-            raised
-            icon="attach_file"
-            @click="$router.push({ name: 'CheckForm' })"
-          >Zur Übersicht</ui-button>
-        </div>
-      </ui-collapse>
+        </ui-collapse>
+      </template>
+
       <p v-if="collapseData.length == 0">Keine Veranstaltungen gefunden.</p>
       <ui-table class="dashboardTable" fullwidth :data="data" :thead="thead" :tbody="tbody">
         <template #actions="{ data }">
