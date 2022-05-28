@@ -14,10 +14,11 @@ onMounted(() => {
 
     if (!store.getters.getUser) ui.start('#firebaseui-auth-container', {
         signInOptions: [
-            GoogleAuthProvider.PROVIDER_ID,
-            EmailAuthProvider.PROVIDER_ID
+            { provider: GoogleAuthProvider.PROVIDER_ID, fullLabel: "Login mit Google" },
+            { provider: EmailAuthProvider.PROVIDER_ID, fullLabel: "Login mit Email", buttonColor: "#3ec994" }
         ],
         signInFlow: 'popup',
+        siteName: "Dein Protest",
         signInSuccessUrl: router.resolve({ name: "Dashboard" }).fullPath,
         callbacks: {
             signInSuccessWithAuthResult: function (authResult, redirectUrl) {

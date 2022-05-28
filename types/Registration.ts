@@ -1,6 +1,6 @@
 import { Aufzug, Versammlung } from "./ProtestEvent";
 import { LegalEntity } from "./LegalEntity"
-export type ProtestLocations = "Berlin" | "Köln" | "Hamburg"
+export type ProtestLocations = "berlin" | "koeln" | "hamburg"
 
 export interface Registration {
     id?: string

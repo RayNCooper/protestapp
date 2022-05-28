@@ -39,7 +39,7 @@ const eventTypeChoices = computed(() => {
 })
 
 function formSubmitted(questionList: Array<{ id: string, answer: string }>) {
-    const d = new Date("1997-12-04")
+    const d = new Date(form.date)
     const day = d.getDate() < 10 ? "0" + d.getDate() : d.getDate()
     const month = d.getMonth() < 10 ? "0" + d.getMonth() : d.getMonth()
     form.date = day + "." + month + "." + d.getFullYear()

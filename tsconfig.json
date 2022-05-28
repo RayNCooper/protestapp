@@ -2,10 +2,11 @@
   "ts-node": {
     // It is faster to skip typechecking.
     // Remove if you want ts-node to do typechecking.
-    "transpileModule": true,
     "files": true,
     "compilerOptions": {
-      "target": "ES2022"
+      "module": "CommonJS",
+      "target": "es2017",
+      "isolatedModules": false,
       // compilerOptions specified here will override those declared below,
       // but *only* in ts-node.  Useful if you want ts-node and tsc to use
       // different options with a single tsconfig.json.
