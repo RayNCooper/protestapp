@@ -1,49 +1,41 @@
 import * as functions from "firebase-functions";
-import { getFirestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage"
 import { Registration } from "../../types/Registration";
-import { BerlinVersammlungRegistration } from "../../types/Cities/Berlin"
-import { PDFDocument } from "pdf-lib";
+import { fillFormBerlin } from "../util/fillForm"
+import { FormError, FormResult } from "../../types/Result";
 
-var fs = require('fs');
-const db = getFirestore();
+const bucket = getStorage().bucket()
 
-exports.generateForm = functions.https.onCall(async (registration: Registration, context) => {
+export const generateForm = functions.https.onCall(async (registration: Registration, context): Promise<FormError | FormResult | { error: boolean, message: string }> => {
     try {
-        const applicant = (await db.collection('legalEntities').doc(registration.applicant.id!).get()).data();
-        const organizer = registration.hasExtraOrganizer ? (await db.collection('legalEntities').doc(registration.organizer!.id!).get()).data() : applicant;
-        const manager = registration.hasExtraManager ? (await db.collection('legalEntities').doc(registration.manager!.id!).get()).data() : organizer;
-        console.log(manager)
-        if (registration.location === "Berlin") {
+
+        if (registration.location === "berlin") {
             try {
-                /* Read Versammlungsdokument */
-                const existingPdfBytes = fs.readFileSync('Berlin.pdf', "base64")
+                const fileRef = bucket.file('documents/germany/berlin/versammlungsanmeldung.pdf')
+                const fileGetResponse = await fileRef.get()
 
-                /*  */
-                const registration = new BerlinVersammlungRegistration()
+                const file = fileGetResponse[0]
+                /* const apiResponse = fileGetResponse[1] */
+                const base64File = Buffer.from((await file.download())[0]).toString('base64')
 
-                // Load a PDFDocument from the existing PDF bytes
-                const pdfDoc = await PDFDocument.load(existingPdfBytes, { ignoreEncryption: true })
-                const form = pdfDoc.getForm()
-                return {
-                    error: false,
-                    message: form,
-                };
+                return await fillFormBerlin(registration, base64File, context.auth!.uid)
 
             } catch (error) {
                 return {
                     error: true,
-                    message: "Something went wrong while inviting an existing Player.",
+                    message: "Something went wrong while filling out the form.",
+                    trace: error as string
                 };
             }
-        } else if (registration.location === "Hamburg") {
+        } else if (registration.location === "hamburg") {
             return {
-                error: false,
-                message: "Hamburg",
+                error: true,
+                message: "Hamburg derzeit nicht verfügbar",
             };
-        } else if (registration.location === "Köln") {
+        } else if (registration.location === "koeln") {
             return {
-                error: false,
-                message: "Köln",
+                error: true,
+                message: "Köln derzeit nicht verfügbar",
             };
         } else return {
             error: true,
@@ -51,10 +43,10 @@ exports.generateForm = functions.https.onCall(async (registration: Registration,
         };
 
     } catch (error) {
-        console.log(error);
         return {
             error: true,
             message: "Something went wrong while trying to find User Objects associated with the given UIDs.",
+            trace: error as string
         };
     }
 });

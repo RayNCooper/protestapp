@@ -1,10 +1,8 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
-import { reactive } from 'vue';
 import { FlowForm, Question, ChoiceOption, LinkOption } from '@ditdot-dev/vue-flow-form'
 import { germanLanguageModel } from '../../languageModel';
 import { useRouter } from 'vue-router';
-import { identity } from 'lodash';
 import { useStore } from 'vuex';
 import { utilityTypes } from '../../../types/ProtestEvent';
 

@@ -14,7 +14,7 @@ export class BerlinVersammlungRegistration implements Registration {
     hasExtraManager: boolean;
     location: ProtestLocations;
 
-    constructor(location: ProtestLocations, assembly: Aufzug | Versammlung, applicant: LegalEntity, hasExtraOrganizer: boolean, hasExtraManager: boolean, organizer: LegalEntity, manager: LegalEntity) {
+    constructor(location: ProtestLocations, assembly: Aufzug | Versammlung, applicant: LegalEntity, organizer: LegalEntity, manager: LegalEntity, hasExtraOrganizer: boolean, hasExtraManager: boolean) {
         this.assembly = assembly
         this.applicant = applicant
         this.organizer = organizer
@@ -41,12 +41,12 @@ export class BerlinVersammlungRegistration implements Registration {
             hasExtraOrganizer: !this.hasExtraOrganizer,
 
             /* Veranstalter & Leiter TODO: Möglichkeit zur Aufspaltung Veranstalter & Leiter und Notiz in beigefügter Seite */
-            nameSecond: this.organizer ? this.organizer.lastName + ", " + this.organizer.firstName : "",
-            addressSecond: this.organizer ? this.organizer.streetName + " " + this.organizer.streetNumber : "",
-            locationSecond: this.organizer ? this.organizer.zipCode + ", " + this.organizer.location : "",
-            phoneSecond: this.organizer ? this.organizer.phone : "",
-            faxSecond: this.organizer ? this.organizer?.fax : "",
-            emailSecond: this.organizer ? this.organizer?.email : "",
+            nameSecond: this.hasExtraOrganizer ? this.organizer.lastName + ", " + this.organizer.firstName : "",
+            addressSecond: this.hasExtraOrganizer ? this.organizer.streetName + " " + this.organizer.streetNumber : "",
+            locationSecond: this.hasExtraOrganizer ? this.organizer.zipCode + ", " + this.organizer.location : "",
+            phoneSecond: this.hasExtraOrganizer ? this.organizer.phone : "",
+            faxSecond: this.hasExtraOrganizer ? this.organizer?.fax : "",
+            emailSecond: this.hasExtraOrganizer ? this.organizer?.email : "",
 
             /* Veranstaltung */
             topic: this.assembly.topic,
@@ -62,7 +62,7 @@ export class BerlinVersammlungRegistration implements Registration {
             /* Zubehör */
             usingLoudspeakerPositive: this.assembly.utilityKinds.includes({ name: "Lautsprecher" }) || this.assembly.utilityKinds.includes({ name: "Megaphone" }),
             usingLoudspeakerNegative: !(this.assembly.utilityKinds.includes({ name: "Lautsprecher" }) || this.assembly.utilityKinds.includes({ name: "Megaphone" })),
-            setupKinds: this.assembly.utilityKinds ? this.assembly.utilityKinds.flatMap((u) => u.name + ", " + u.itemCount + " Stk.; ").toString() : "",
+            setupKinds: this.assembly.utilityKinds.filter((u) => u.itemCount! > 0).map((u) => u.name + ", " + u.itemCount + " Stk.; ").join(""),
 
             /* Fahrzeuge */
             usingVehiclesPositive: this.assembly.usingVehicles,

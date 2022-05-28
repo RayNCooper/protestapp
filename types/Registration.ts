@@ -17,8 +17,8 @@ export interface Registration {
         (4) Der Leiter übt das Hausrecht aus.
     */
     applicant: LegalEntity       // Anmelder
-    organizer?: LegalEntity      // Veranstalter 
-    manager?: LegalEntity        // Leiter
+    organizer: LegalEntity       // Veranstalter 
+    manager: LegalEntity         // Leiter
 
     /* Gibt es zusätzlich einen Veranstalter? */
     hasExtraOrganizer: boolean
