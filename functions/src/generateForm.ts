@@ -22,23 +22,23 @@ export const generateForm = functions.https.onCall(async (registration: Registra
             } catch (error) {
                 return {
                     error: true,
-                    message: "Something went wrong while filling out the form.",
+                    message: "Fehler: Etwas lief schief beim Auslesen des Originalformulars.",
                     trace: error as string
                 };
             }
         } else if (registration.location === "hamburg") {
             return {
                 error: true,
-                message: "Hamburg derzeit nicht verfügbar",
+                message: "Fehler: Hamburg derzeit nicht verfügbar",
             };
         } else if (registration.location === "koeln") {
             return {
                 error: true,
-                message: "Köln derzeit nicht verfügbar",
+                message: "Fehler: Köln derzeit nicht verfügbar",
             };
         } else return {
             error: true,
-            message: "Error: Unknown Assembly Location",
+            message: "Fehler: Veranstaltungsort (Stadt) unbekannt",
         };
 
     } catch (error) {

@@ -21,7 +21,6 @@ const registrationsModule = {
             applicant: { email: "", firstName: "", lastName: "", location: "", phone: "", streetName: "", streetNumber: "", zipCode: "", fax: "", id: "", institutionName: "" },
             manager: { email: "", firstName: "", lastName: "", location: "", phone: "", streetName: "", streetNumber: "", zipCode: "", fax: "", id: "", institutionName: "" },
             organizer: { email: "", firstName: "", lastName: "", location: "", phone: "", streetName: "", streetNumber: "", zipCode: "", fax: "", id: "", institutionName: "" },
-            hasExtraOrganizer: false, hasExtraManager: false,
         },
         enableStepSkip: false,
         registrations: []
@@ -52,7 +51,7 @@ const registrationsModule = {
                 const querySnapshot = await getDocs(registrationsRef);
                 const registrations = querySnapshot.docs.flatMap((event: any) => { return { id: event.id, ...event.data() } })
                 context.commit("addRegistrations", registrations)
-            }
+            } else if (localStorage.getItem("registrations")) context.commit("addRegistrations", JSON.parse(localStorage.getItem("registrations")!))
         },
         async createRegistration(context: ActionContext<RegistrationModuleState, RootState>, payload: Registration) {
             const user = context.getters.getUser

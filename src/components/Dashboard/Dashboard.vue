@@ -46,7 +46,6 @@ const data = computed(() => {
 
 const collapseData = computed(() => {
   const remoteRegistrations = store.getters.getRegistrations
-
   return remoteRegistrations.map((r: { registration: Registration, publicUrl: string }) => {
     const asm = r.registration.assembly
     const app = r.registration.applicant
@@ -132,7 +131,7 @@ const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', { slot: '
     action-bar-button-tooltip="Neue Anmeldung nach VersammlG erstellen"
     action-bar-button-link-name="EventPeopleSelection"
     action-bar-button-c-s-s-id="dashboardFab"
-    style="width: 95%"
+    style="width: 95%; margin-top: 2em;"
   >
     <template #content>
       <template v-if="collapseData.length > 0" v-for="(reg, i) in collapseData">

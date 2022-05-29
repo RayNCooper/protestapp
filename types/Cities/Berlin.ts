@@ -10,22 +10,18 @@ export class BerlinVersammlungRegistration implements Registration {
     organizer: LegalEntity;
     manager: LegalEntity;
 
-    hasExtraOrganizer: boolean;
-    hasExtraManager: boolean;
     location: ProtestLocations;
 
-    constructor(location: ProtestLocations, assembly: Aufzug | Versammlung, applicant: LegalEntity, organizer: LegalEntity, manager: LegalEntity, hasExtraOrganizer: boolean, hasExtraManager: boolean) {
+    constructor(location: ProtestLocations, assembly: Aufzug | Versammlung, applicant: LegalEntity, organizer: LegalEntity, manager: LegalEntity) {
         this.assembly = assembly
         this.applicant = applicant
         this.organizer = organizer
         this.manager = manager
         this.location = location
-
-        this.hasExtraOrganizer = hasExtraOrganizer
-        this.hasExtraManager = hasExtraManager
     }
 
     get formMapping() {
+        const hasExtraOrganizer = this.applicant.id != this.organizer.id
         return {
 
             /* Anmelder */
@@ -38,15 +34,15 @@ export class BerlinVersammlungRegistration implements Registration {
             emailFirst: this.applicant.email,
 
             /* Anmelder = Veranstalter */
-            hasExtraOrganizer: !this.hasExtraOrganizer,
+            hasExtraOrganizer: hasExtraOrganizer,
 
             /* Veranstalter & Leiter TODO: Möglichkeit zur Aufspaltung Veranstalter & Leiter und Notiz in beigefügter Seite */
-            nameSecond: this.hasExtraOrganizer ? this.organizer.lastName + ", " + this.organizer.firstName : "",
-            addressSecond: this.hasExtraOrganizer ? this.organizer.streetName + " " + this.organizer.streetNumber : "",
-            locationSecond: this.hasExtraOrganizer ? this.organizer.zipCode + ", " + this.organizer.location : "",
-            phoneSecond: this.hasExtraOrganizer ? this.organizer.phone : "",
-            faxSecond: this.hasExtraOrganizer ? this.organizer?.fax : "",
-            emailSecond: this.hasExtraOrganizer ? this.organizer?.email : "",
+            nameSecond: hasExtraOrganizer ? this.organizer.lastName + ", " + this.organizer.firstName : "",
+            addressSecond: hasExtraOrganizer ? this.organizer.streetName + " " + this.organizer.streetNumber : "",
+            locationSecond: hasExtraOrganizer ? this.organizer.zipCode + ", " + this.organizer.location : "",
+            phoneSecond: hasExtraOrganizer ? this.organizer.phone : "",
+            faxSecond: hasExtraOrganizer ? this.organizer?.fax : "",
+            emailSecond: hasExtraOrganizer ? this.organizer?.email : "",
 
             /* Veranstaltung */
             topic: this.assembly.topic,

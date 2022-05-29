@@ -17,8 +17,6 @@ export const fillFormBerlin = async (r: Registration, base64File: string, uid: s
             r.applicant,
             r.organizer,
             r.manager,
-            r.hasExtraOrganizer,
-            r.hasExtraManager,
         )
 
         // Load a PDFDocument from the existing PDF bytes
@@ -76,10 +74,9 @@ export const fillFormBerlin = async (r: Registration, base64File: string, uid: s
                 file: base64File
             }
         } */
-
         return { error: false, url: fileRef.publicUrl() }
     } catch (error) {
-        return { error: true, message: "Error: Something went wrong while filling in Berlin Form", trace: error as string }
+        return { error: true, message: "Fehler: Etwas lief schief beim Ausfüllen des Formulars", trace: error as string }
     }
 
 }

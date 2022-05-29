@@ -14,6 +14,9 @@ const loading = ref(true)
 const loadingText = ref("")
 
 const formUrl = ref("")
+const failedGenerate = ref(false)
+const showFailedGenerateSnackbar = ref(false)
+const errorMessage = ref("")
 
 onBeforeMount(async () => {
     setLoadingText(0)
@@ -24,16 +27,28 @@ onBeforeMount(async () => {
             try {
                 const result = await store.dispatch("callGenerateForm", registration)
                 formUrl.value = result.data.url
-                /* if (result.data.error == false) {
-                    localStorage.removeItem("draftedRegistration")
-                } */
+                if (result.data.error == false) {
+                    result as { data: { error: boolean, url: string } }
+                    /* localStorage.removeItem("draftedRegistration") */
+                    if (!store.getters.getUser) {
+                        if (localStorage.getItem("registrations")) {
+                            const localRegistrations = JSON.parse(localStorage.getItem("registrations")!)
+                            localRegistrations.push({ registration: registration, publicUrl: result.data.url })
+                            localStorage.setItem("registrations", JSON.stringify(localRegistrations))
+                        } else localStorage.setItem("registrations", JSON.stringify([{ registration: registration, publicUrl: result.data.url }]))
+                    }
+                } else {
+                    errorMessage.value = result.data.message
+                    showFailedGenerateSnackbar.value = true;
+                    failedGenerate.value = true
+                }
 
                 loading.value = false
             } catch (error) {
                 console.log(error)
                 loading.value = false
             }
-        }, 4000);
+        }, 40);
 
     }
 })
@@ -80,7 +95,7 @@ async function setLoadingText(i: number) {
             <h1 style="margin-bottom: 2px">Generiere Formular</h1>
             <h4 style="margin-top: 0em; color: gray;">{{ loadingText }}</h4>
         </template>
-        <template v-else>
+        <template v-if="(!loading && !failedGenerate)">
             <h1 style="margin-bottom: 0">Fertig.</h1>
             <h4
                 v-if="store.getters.getUser"
@@ -91,7 +106,7 @@ async function setLoadingText(i: number) {
                 style="margin-top: 2px; color: #4bcd9b"
             >Der Link zum Formular wird im Browser gespeichert</h4>
 
-            <div style="display: flex; gap: 3px;">
+            <div class="buttonFlex">
                 <a
                     v-if="formUrl != ''"
                     v-button
@@ -107,8 +122,51 @@ async function setLoadingText(i: number) {
                 >Zum Dashboard</ui-button>
             </div>
         </template>
+        <template v-else-if="failedGenerate">
+            <h2 style="margin-bottom: 0; color: #ff1919;">Ein Fehler ist aufgetreten</h2>
+            <h4
+                style="margin-bottom: 2em;margin-top: 2px; color: gray;"
+            >Versuche es jetzt oder später erneut.</h4>
+
+            <div class="buttonFlex">
+                <ui-button
+                    style="margin-top:2px; color:white; background-color:#4bcd9b;height: 3em;"
+                    raised
+                    icon="description"
+                    @click="router.replace({ name: 'CheckForm' })"
+                >Zur Übersicht</ui-button>
+                <ui-button
+                    style="margin-top:2px; color:white; background-color:black;height: 3em;"
+                    raised
+                    icon="space_dashboard"
+                    @click="router.replace({ name: 'Dashboard' })"
+                >Zum Dashboard</ui-button>
+            </div>
+        </template>
+        <ui-snackbar
+            v-model="showFailedGenerateSnackbar"
+            :message="errorMessage"
+            timeout-ms="3000"
+            :action-type="1"
+        ></ui-snackbar>
+        <ui-button icon="mail">Kontakt</ui-button>
     </div>
 </template>
 
 <style scoped>
+@media (max-width: 820px) {
+    .buttonFlex {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        width: 100%;
+    }
+}
+@media (min-width: 820px) {
+    .buttonFlex {
+        display: flex;
+        flex-direction: row;
+        gap: 3px;
+    }
+}
 </style>

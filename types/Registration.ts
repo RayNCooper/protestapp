@@ -19,10 +19,4 @@ export interface Registration {
     applicant: LegalEntity       // Anmelder
     organizer: LegalEntity       // Veranstalter 
     manager: LegalEntity         // Leiter
-
-    /* Gibt es zusätzlich einen Veranstalter? */
-    hasExtraOrganizer: boolean
-
-    /* Gibt es einen delegierten Leiter? */
-    hasExtraManager: boolean
 }
