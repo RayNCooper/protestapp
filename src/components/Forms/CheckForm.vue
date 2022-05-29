@@ -53,7 +53,7 @@ function submitForm() {
         >Zur Startseite</router-link>
     </template>
     <template v-else-if="registration && !loading">
-        <h2 style="margin-top: 2em">{{ capitalize(registration.assembly.type) }}</h2>
+        <h2 class="checkFormHeading">{{ capitalize(registration.assembly.type) }}</h2>
         <card-wrapper
             card-title="Assoziierte Personen"
             action-bar-top="true"
@@ -114,180 +114,171 @@ function submitForm() {
                 </ui-list>
             </template>
         </card-wrapper>
-        <card-wrapper card-title="Informationen zur Veranstaltung" class="checkFormCard">
-            <template #content>
-                <card-wrapper
-                    :card-title="registration.assembly.topic ? 'Allgemeine Information' : 'Allgemeine Information (ausstehend)'"
-                    action-bar-top="true"
-                    action-bar-top-icon="edit"
-                    action-bar-button-link-name="EventLocationSelection"
-                    action-bar-headline-size="4"
-                    style="border: 0;"
-                >
-                    <template v-slot:content>
-                        <ui-list :type="2" v-if="registration.assembly.topic">
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ capitalize(registration.location) }}</ui-item-text1>
-                                    <ui-item-text2>Ort der Veranstaltung</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ capitalize(registration.assembly.type) }}</ui-item-text1>
-                                    <ui-item-text2>Typ der Veranstaltung</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.topic }}</ui-item-text1>
-                                    <ui-item-text2>Thema der Veranstaltung</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.date }}</ui-item-text1>
-                                    <ui-item-text2>Datum der Veranstaltung</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.startTime }}</ui-item-text1>
-                                    <ui-item-text2>Startzeit der Veranstaltung</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.endTime }}</ui-item-text1>
-                                    <ui-item-text2>Endzeit der Veranstaltung</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.location }}</ui-item-text1>
-                                    <ui-item-text2
-                                        v-if="registration.assembly.type == 'aufzug'"
-                                    >Startort der Veranstaltung</ui-item-text2>
-                                    <ui-item-text2 v-else>Ort der Veranstaltung</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item v-if="registration.assembly.type == 'aufzug'">
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.route }}</ui-item-text1>
-                                    <ui-item-text2>Route der Veranstaltung</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                        </ui-list>
-                    </template>
-                </card-wrapper>
-                <card-wrapper
-                    :card-title="registration.assembly.participantCount > 0 ? 'Teilnahme' : 'Teilnahme (ausstehend)'"
-                    action-bar-top="true"
-                    action-bar-top-icon="edit"
-                    action-bar-button-link-name="EventParticipationForm"
-                    action-bar-headline-size="4"
-                    style="border: 0;"
-                >
-                    <template v-slot:content>
-                        <ui-list v-if="registration.assembly.participantCount > 0" :type="2">
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.participantCount }}</ui-item-text1>
-                                    <ui-item-text2>Geschätzte Anzahl an Teilnehmern</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.usingStewards ? "Ja" : "Nein" }}</ui-item-text1>
-                                    <ui-item-text2>Einsatz von Ordnern</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item v-if="registration.assembly.usingStewards">
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.stewardCount }}</ui-item-text1>
-                                    <ui-item-text2>Anzahl Eingesetzter Ordner</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                        </ui-list>
-                    </template>
-                </card-wrapper>
-                <card-wrapper
-                    card-title="Fahrzeuge"
-                    action-bar-top="true"
-                    action-bar-top-icon="edit"
-                    action-bar-button-link-name="EventVehicleForm"
-                    action-bar-headline-size="4"
-                    style="border: 0;"
-                >
-                    <template v-slot:content>
-                        <ui-list :type="2">
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.usingVehicles ? "Ja" : "Nein" }}</ui-item-text1>
-                                    <ui-item-text2>Einsatz von Fahrzeugen</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item v-if="registration.assembly.usingVehicles">
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.vehicleKinds }}</ui-item-text1>
-                                    <ui-item-text2>Arten Eingesetzter Fahrzeuge</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                        </ui-list>
-                    </template>
-                </card-wrapper>
-                <card-wrapper
-                    card-title="Hilfsmittel"
-                    action-bar-top="true"
-                    action-bar-top-icon="edit"
-                    action-bar-button-link-name="EventUtilityForm"
-                    action-bar-headline-size="4"
-                    style="border: 0;"
-                >
-                    <template v-slot:content>
-                        <ui-list :type="2" v-if="utilities">
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ utilities }}</ui-item-text1>
-                                    <ui-item-text2>Arten Eingesetzter Hilfsmittel</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                        </ui-list>
-                    </template>
-                </card-wrapper>
-                <card-wrapper
-                    :card-title="registration.assembly.covidPrecautions ? 'Andere' : 'Andere (ausstehend)'"
-                    action-bar-top="true"
-                    action-bar-top-icon="edit"
-                    action-bar-button-link-name="EventOtherForm"
-                    action-bar-headline-size="4"
-                    style="border: 0;"
-                >
-                    <template v-slot:content>
-                        <ui-list :type="2" v-if="registration.assembly.covidPrecautions">
-                            <ui-item>
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.covidPrecautions }}</ui-item-text1>
-                                    <ui-item-text2>COVID Konformität</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                            <ui-item v-if="registration.assembly.comments">
-                                <ui-item-text-content>
-                                    <ui-item-text1>{{ registration.assembly.comments }}</ui-item-text1>
-                                    <ui-item-text2>Kommentare</ui-item-text2>
-                                </ui-item-text-content>
-                            </ui-item>
-                        </ui-list>
-                    </template>
-                </card-wrapper>
+        <card-wrapper
+            :card-title="registration.assembly.topic ? 'Allgemeine Information' : 'Allgemeine Information (ausstehend)'"
+            action-bar-top="true"
+            action-bar-top-icon="edit"
+            action-bar-button-link-name="EventLocationSelection"
+            class="checkFormCard"
+        >
+            <template v-slot:content>
+                <ui-list :type="2" v-if="registration.assembly.topic">
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ capitalize(registration.location) }}</ui-item-text1>
+                            <ui-item-text2>Ort der Veranstaltung</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ capitalize(registration.assembly.type) }}</ui-item-text1>
+                            <ui-item-text2>Typ der Veranstaltung</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.topic }}</ui-item-text1>
+                            <ui-item-text2>Thema der Veranstaltung</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.date }}</ui-item-text1>
+                            <ui-item-text2>Datum der Veranstaltung</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.startTime }}</ui-item-text1>
+                            <ui-item-text2>Startzeit der Veranstaltung</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.endTime }}</ui-item-text1>
+                            <ui-item-text2>Endzeit der Veranstaltung</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.location }}</ui-item-text1>
+                            <ui-item-text2
+                                v-if="registration.assembly.type == 'aufzug'"
+                            >Startort der Veranstaltung</ui-item-text2>
+                            <ui-item-text2 v-else>Ort der Veranstaltung</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item v-if="registration.assembly.type == 'aufzug'">
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.route }}</ui-item-text1>
+                            <ui-item-text2>Route der Veranstaltung</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                </ui-list>
+            </template>
+        </card-wrapper>
+        <card-wrapper
+            :card-title="registration.assembly.participantCount > 0 ? 'Teilnahme' : 'Teilnahme (ausstehend)'"
+            action-bar-top="true"
+            action-bar-top-icon="edit"
+            action-bar-button-link-name="EventParticipationForm"
+            class="checkFormCard"
+        >
+            <template v-slot:content>
+                <ui-list v-if="registration.assembly.participantCount > 0" :type="2">
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.participantCount }}</ui-item-text1>
+                            <ui-item-text2>Geschätzte Anzahl an Teilnehmern</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.usingStewards ? "Ja" : "Nein" }}</ui-item-text1>
+                            <ui-item-text2>Einsatz von Ordnern</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item v-if="registration.assembly.usingStewards">
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.stewardCount }}</ui-item-text1>
+                            <ui-item-text2>Anzahl Eingesetzter Ordner</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                </ui-list>
+            </template>
+        </card-wrapper>
+        <card-wrapper
+            card-title="Fahrzeuge"
+            action-bar-top="true"
+            action-bar-top-icon="edit"
+            action-bar-button-link-name="EventVehicleForm"
+            class="checkFormCard"
+        >
+            <template v-slot:content>
+                <ui-list :type="2">
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.usingVehicles ? "Ja" : "Nein" }}</ui-item-text1>
+                            <ui-item-text2>Einsatz von Fahrzeugen</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item v-if="registration.assembly.usingVehicles">
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.vehicleKinds }}</ui-item-text1>
+                            <ui-item-text2>Arten Eingesetzter Fahrzeuge</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                </ui-list>
+            </template>
+        </card-wrapper>
+        <card-wrapper
+            card-title="Hilfsmittel"
+            action-bar-top="true"
+            action-bar-top-icon="edit"
+            action-bar-button-link-name="EventUtilityForm"
+            class="checkFormCard"
+        >
+            <template v-slot:content>
+                <ui-list :type="2" v-if="utilities">
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ utilities }}</ui-item-text1>
+                            <ui-item-text2>Arten Eingesetzter Hilfsmittel</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                </ui-list>
+            </template>
+        </card-wrapper>
+        <card-wrapper
+            :card-title="registration.assembly.covidPrecautions ? 'Andere' : 'Andere (ausstehend)'"
+            action-bar-top="true"
+            action-bar-top-icon="edit"
+            action-bar-button-link-name="EventOtherForm"
+            class="checkFormCard"
+        >
+            <template v-slot:content>
+                <ui-list :type="2" v-if="registration.assembly.covidPrecautions">
+                    <ui-item>
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.covidPrecautions }}</ui-item-text1>
+                            <ui-item-text2>COVID Konformität</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                    <ui-item v-if="registration.assembly.comments">
+                        <ui-item-text-content>
+                            <ui-item-text1>{{ registration.assembly.comments }}</ui-item-text1>
+                            <ui-item-text2>Kommentare</ui-item-text2>
+                        </ui-item-text-content>
+                    </ui-item>
+                </ui-list>
             </template>
         </card-wrapper>
         <ui-button
-            icon="east"
-            style="margin-bottom: 2em; background-color: black; color: white; height: 3em;"
+            icon="table_view"
+            class="generateButton"
             raised
             @click="submitForm"
-        >Weiter</ui-button>
+        >Formular Generieren</ui-button>
     </template>
     <ui-snackbar
         v-model="showFailedSubmitSnackbar"
@@ -298,8 +289,36 @@ function submitForm() {
 </template>
 
 <style scoped>
-.checkFormCard {
-    width: 80%;
-    position: relative;
+@media (min-width: 820px) {
+    .checkFormCard {
+        width: 80%;
+    }
+    .generateButton {
+        margin-bottom: 1em;
+        background-color: #4bcd9b;
+        color: white;
+        height: 4em;
+        width: 80%;
+    }
+    .checkFormHeading {
+        margin-top: 2em
+    }
+}
+@media (max-width: 820px) {
+    .checkFormCard {
+        width: 95%;
+        border: 1px solid #eaeaea;
+        margin-top: 0;
+    }
+    .generateButton {
+        margin-bottom: 1em;
+        background-color: #4bcd9b;
+        color: white;
+        height: 4em;
+        width: 95%;
+    }
+    .checkFormHeading {
+        margin-top: 1em
+    }
 }
 </style>

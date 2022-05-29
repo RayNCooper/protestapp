@@ -68,11 +68,22 @@ const router = useRouter()
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-content: center;
+    align-items: center;
 }
 
 @media (min-width: 820px) {
     .card_container {
         border: 1px solid #eaeaea;
+    }
+}
+@media(max-width: 400px) {
+    .mdc-fab {
+        width: 48px;
+        height: 48px;
+    }
+    .card_content {
+        margin: 1em;
     }
 }
 </style>

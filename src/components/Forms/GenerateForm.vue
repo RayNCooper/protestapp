@@ -48,7 +48,7 @@ onBeforeMount(async () => {
                 console.log(error)
                 loading.value = false
             }
-        }, 40);
+        }, 4000);
 
     }
 })
