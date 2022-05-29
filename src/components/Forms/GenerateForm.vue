@@ -23,11 +23,10 @@ onBeforeMount(async () => {
         setTimeout(async () => {
             try {
                 const result = await store.dispatch("callGenerateForm", registration)
-                console.log(result)
                 formUrl.value = result.data.url
-                if (result.data.error == false) {
+                /* if (result.data.error == false) {
                     localStorage.removeItem("draftedRegistration")
-                }
+                } */
 
                 loading.value = false
             } catch (error) {
@@ -94,6 +93,7 @@ async function setLoadingText(i: number) {
 
             <div style="display: flex; gap: 3px;">
                 <a
+                    v-if="formUrl != ''"
                     v-button
                     :href="formUrl"
                     target="_noreferrer"

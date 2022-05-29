@@ -28,17 +28,18 @@ const draftedData = computed(() => {
 })
 
 const data = computed(() => {
-  const remoteRegistrations = store.getters.getRegistrations as Registration[]
+  const remoteRegistrations = store.getters.getRegistrations as { registration: Registration, publicUrl: string }[]
 
-  if (remoteRegistrations.length > 0) return remoteRegistrations.map((r: { registration: Registration, publicUrl: string }) => {
+  if (remoteRegistrations.length > 0) return remoteRegistrations.map((r) => {
     const asm = r.registration.assembly
     const app = r.registration.applicant
     return {
-      titel: asm.topic ? asm.topic : "-",
-      datum: asm.date ? asm.date : "-",
-      teilnehmerzahl: asm.participantCount ? asm.participantCount : "-",
+      titel: asm.topic,
+      datum: asm.date,
+      teilnehmerzahl: asm.participantCount,
       anmelder: app.firstName + " " + app.lastName,
-      ort: asm.topic ? capitalize(r.registration.location) : "-",
+      ort: capitalize(r.registration.location),
+      publicUrl: r.publicUrl,
     }
   }); else return [{ titel: "-", datum: "-", anmelder: "-", teilnehmerzahl: "-", ort: "-" }]
 })
@@ -49,12 +50,14 @@ const collapseData = computed(() => {
   return remoteRegistrations.map((r: { registration: Registration, publicUrl: string }) => {
     const asm = r.registration.assembly
     const app = r.registration.applicant
-    return r.registration.assembly.topic ? {
-      titel: asm.topic ? r.registration.assembly.topic : "-",
-      datum: asm.date ? asm.date : "-",
-      teilnehmerzahl: asm.participantCount ? asm.participantCount : "-",
-      anmelder: app.firstName + " " + app.lastName, ort: asm.topic ? capitalize(r.registration.location) : "-",
-    } : null
+    return {
+      titel: asm.topic,
+      datum: asm.date,
+      teilnehmerzahl: asm.participantCount,
+      anmelder: app.firstName + " " + app.lastName,
+      ort: capitalize(r.registration.location),
+      publicUrl: r.publicUrl
+    }
   }).filter((a) => a);
 })
 
@@ -62,8 +65,8 @@ const thead = ['Titel der Versammlung', 'Datum', 'Anz. Teilnehmer', 'Anmelder', 
 const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', {
   slot: 'actions'
 }]
-const thead2 = ['Titel der Versammlung', 'Datum', 'Anz. Teilnehmer', 'Anmelder', 'Ort']
-const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort']
+const thead2 = ['Titel der Versammlung', 'Datum', 'Anz. Teilnehmer', 'Anmelder', 'Ort', 'Formular']
+const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', { slot: 'form' }]
 </script>
 
 <template>
@@ -74,41 +77,38 @@ const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort']
     style="width: 95%; margin-top: 2em"
   >
     <template #content>
-      <template v-if="collapseData.length > 0" v-for="(reg, i) in draftedData">
-        <ui-collapse v-if="reg" :key="i + reg.titel" with-icon ripple class="dashboardCollapse">
-          <template #toggle>
-            <div
-              class="tet"
-              style="font-size: larger; font-weight: 500; padding-bottom: 1em; padding-top: 1em;"
-            >
-              {{
-                reg.entwurf ? '🚧 ' + reg.titel : reg.titel
-              }}
-            </div>
-          </template>
-          <div class="dashboardCollapseContent">
-            <p style="margin-top: 0em; font-weight: 400;font-size: medium">
-              🚩
-              <span style="padding-left:0.5em; font-size: small;">{{ reg.anmelder }}</span>
-            </p>
-            <p style="font-weight: 400; font-size: medium;">
-              📅
-              <span style="padding-left:0.5em">{{ reg.datum }}</span>
-            </p>
-            <p style="font-weight: 400;font-size: medium;">
-              🏠
-              <span style="padding-left:0.5em">{{ reg.ort }}</span>
-            </p>
-            <ui-button
-              v-if="reg.entwurf"
-              style="background-color: white;  color: green; width: 100%; height: 3em;"
-              raised
-              icon="attach_file"
-              @click="$router.push({ name: 'CheckForm' })"
-            >Zur Übersicht</ui-button>
+      <ui-collapse with-icon ripple class="dashboardCollapse">
+        <template #toggle>
+          <div
+            class="tet"
+            style="font-size: larger; font-weight: 500; padding-bottom: 1em; padding-top: 1em;"
+          >
+            {{
+              '🚧 ' + draftedData[0].titel
+            }}
           </div>
-        </ui-collapse>
-      </template>
+        </template>
+        <div class="dashboardCollapseContent">
+          <p style="margin-top: 0em; font-weight: 400;font-size: medium">
+            🚩
+            <span style="padding-left:0.5em; font-size: small;">{{ draftedData[0].anmelder }}</span>
+          </p>
+          <p style="font-weight: 400; font-size: medium;">
+            📅
+            <span style="padding-left:0.5em">{{ draftedData[0].datum }}</span>
+          </p>
+          <p style="font-weight: 400;font-size: medium;">
+            🏠
+            <span style="padding-left:0.5em">{{ draftedData[0].ort }}</span>
+          </p>
+          <ui-button
+            style="background-color: white;  color: green; width: 100%; height: 3em;"
+            raised
+            icon="description"
+            @click="$router.push({ name: 'CheckForm' })"
+          >Zur Übersicht</ui-button>
+        </div>
+      </ui-collapse>
 
       <p v-if="!draftedData">Derzeit ist keine Veranstaltung in Bearbeitung.</p>
       <ui-table
@@ -160,25 +160,28 @@ const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort']
               🏠
               <span style="padding-left:0.5em">{{ reg.ort }}</span>
             </p>
-            <ui-button
-              v-if="reg.entwurf"
-              style="background-color: white;  color: green; width: 100%; height: 3em;"
-              raised
-              icon="attach_file"
-              @click="$router.push({ name: 'CheckForm' })"
-            >Zur Übersicht</ui-button>
+            <a v-if="reg.publicUrl" :href="reg.publicUrl" target="_noreferrer">
+              <ui-button
+                style="background-color: white;  color: green; width: 100%; height: 3em;"
+                raised
+                icon="open_in_new"
+              >Zum Formular</ui-button>
+            </a>
           </div>
         </ui-collapse>
       </template>
 
       <p v-if="collapseData.length == 0">Keine Veranstaltungen gefunden.</p>
       <ui-table class="dashboardTable" fullwidth :data="data" :thead="thead2" :tbody="tbody2">
-        <template #actions="{ data }">
-          <ui-icon
-            v-if="data.entwurf && data.entwurf !== '-'"
-            outlined
-            @click="router.push({ name: 'CheckForm' })"
-          >edit</ui-icon>
+        <template #form="{ data }">
+          <a
+            style="color: black;"
+            v-if="data.publicUrl"
+            :href="data.publicUrl"
+            target="_noreferrer"
+          >
+            <ui-icon outlined>open_in_new</ui-icon>
+          </a>
         </template>
       </ui-table>
     </template>

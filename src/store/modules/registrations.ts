@@ -14,10 +14,14 @@ type RegistrationModuleState = {
 const registrationsModule = {
     state: (): RegistrationModuleState => ({
         draftedRegistration: {
-            location: "Berlin",
+            location: "berlin",
             assembly: {
                 type: "Aufzug", topic: "", date: "", startTime: "", endTime: "", location: "", participantCount: 0, usingStewards: false, stewardCount: 0, usingVehicles: false, vehicleKinds: "", utilityKinds: [], covidPrecautions: "", comments: "", route: "",
-            }, applicant: { email: "", firstName: "", lastName: "", location: "", phone: "", streetName: "", streetNumber: "", zipCode: "", fax: "", id: "", institutionName: "" }, hasExtraOrganizer: false, hasExtraManager: false,
+            },
+            applicant: { email: "", firstName: "", lastName: "", location: "", phone: "", streetName: "", streetNumber: "", zipCode: "", fax: "", id: "", institutionName: "" },
+            manager: { email: "", firstName: "", lastName: "", location: "", phone: "", streetName: "", streetNumber: "", zipCode: "", fax: "", id: "", institutionName: "" },
+            organizer: { email: "", firstName: "", lastName: "", location: "", phone: "", streetName: "", streetNumber: "", zipCode: "", fax: "", id: "", institutionName: "" },
+            hasExtraOrganizer: false, hasExtraManager: false,
         },
         enableStepSkip: false,
         registrations: []
@@ -46,8 +50,7 @@ const registrationsModule = {
                 const registrationsRef = uid ? collection(db, `registrations/${uid}/docs`) : collection(db, `registrations/anon/docs`);
 
                 const querySnapshot = await getDocs(registrationsRef);
-                const registrations = querySnapshot.docs.flatMap((event: any) => { console.log(event.data()); return { id: event.id, ...event.data() } })
-                console.log(registrations)
+                const registrations = querySnapshot.docs.flatMap((event: any) => { return { id: event.id, ...event.data() } })
                 context.commit("addRegistrations", registrations)
             }
         },
