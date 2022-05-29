@@ -19,7 +19,6 @@ const contentClass = computed(() => {
 onBeforeMount(() => {
   const draftedRegJson = localStorage.getItem('draftedRegistration')
   const legalEntJson = localStorage.getItem('legalEntities')
-  console.log(store.getters.getUser)
   if (draftedRegJson) store.commit("setDraftedRegistration", JSON.parse(draftedRegJson))
   if (legalEntJson) store.commit("addLegalEntities", JSON.parse(legalEntJson))
 })

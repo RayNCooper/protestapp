@@ -4,8 +4,10 @@ import { PDFDocument } from "pdf-lib";
 import { BerlinVersammlungRegistration } from "../../types/Cities/Berlin"
 import { Registration } from "../../types/Registration";
 import { FormResult, FormError } from "../../types/Result"
+import { getFirestore } from "firebase-admin/firestore"
 
 const bucket = getStorage().bucket()
+const store = getFirestore()
 
 export const fillFormBerlin = async (r: Registration, base64File: string, uid: string | undefined): Promise<FormResult | FormError> => {
     try {
@@ -54,15 +56,27 @@ export const fillFormBerlin = async (r: Registration, base64File: string, uid: s
         form.flatten()
         const pdfBytes = await pdfDoc.saveAsBase64()
 
-        const fileRef = uid ? bucket.file(`documents/users/${uid}/${Date.now()}.pdf`) : bucket.file(`documents/users/anon/${Date.now()}.pdf`)
-        await fileRef.save(Buffer.from(pdfBytes, "base64"), { metadata: {} })
+        const date = Date.now()
+
+        const fileRef = uid ? bucket.file(`documents/users/${uid}/${date}.pdf`) : bucket.file(`documents/users/anon/${date}-ber-${Math.random()}.pdf`)
+        await fileRef.save(Buffer.from(pdfBytes, "base64"), { metadata: {}, })
         await fileRef.makePublic()
+
+        try {
+            if (uid)
+                await store.doc(`registrations/${uid}/docs/${date}`).create({ publicUrl: fileRef.publicUrl(), read: uid, registration: r })
+
+        } catch (error) {
+            console.log(error)
+        }
+
         /* return {
             error: false, message: {
                 response: apiResponse,
                 file: base64File
             }
         } */
+
         return { error: false, url: fileRef.publicUrl() }
     } catch (error) {
         return { error: true, message: "Error: Something went wrong while filling in Berlin Form", trace: error as string }

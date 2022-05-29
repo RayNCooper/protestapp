@@ -13,41 +13,126 @@ onBeforeMount(async () => {
   await store.dispatch("setRegistrationsState")
 })
 
-const data = computed(() => {
-  const draft = store.getters.getDraftedRegistration as Registration
-  const remoteRegistrations = store.getters.getRegistrations as Registration[]
-  const registrations = draft.organizer?.id ? [draft, remoteRegistrations].flat() : remoteRegistrations
+const draftedData = computed(() => {
+  const regJson = localStorage.getItem("draftedRegistration")
+  if (regJson) {
+    const draft = JSON.parse(regJson) as Registration
+    return [{
+      titel: draft.assembly.topic ? draft.assembly.topic : "-",
+      datum: draft.assembly.date ? draft.assembly.date : "-",
+      teilnehmerzahl: draft.assembly.participantCount ? draft.assembly.participantCount : "-",
+      anmelder: draft.applicant.firstName + " " + draft.applicant.lastName,
+      ort: draft.assembly.topic ? capitalize(draft.location) : "-",
+    }]
+  } else return null
+})
 
-  if (registrations.length > 0) return registrations.map((r: Registration) => {
-    return { titel: r.assembly.topic ? r.assembly.topic : "-", datum: r.assembly.date ? r.assembly.date : "-", teilnehmerzahl: r.assembly.participantCount ? r.assembly.participantCount : "-", anmelder: r.applicant.firstName + " " + r.applicant.lastName, ort: r.assembly.topic ? capitalize(r.location) : "-", entwurf: draft.id === r.id ? "✅" : "" }
-  }); else return [{ titel: "-", datum: "-", anmelder: "-", teilnehmerzahl: "-", ort: "-", entwurf: "-" }]
+const data = computed(() => {
+  const remoteRegistrations = store.getters.getRegistrations as Registration[]
+
+  if (remoteRegistrations.length > 0) return remoteRegistrations.map((r: { registration: Registration, publicUrl: string }) => {
+    const asm = r.registration.assembly
+    const app = r.registration.applicant
+    return {
+      titel: asm.topic ? asm.topic : "-",
+      datum: asm.date ? asm.date : "-",
+      teilnehmerzahl: asm.participantCount ? asm.participantCount : "-",
+      anmelder: app.firstName + " " + app.lastName,
+      ort: asm.topic ? capitalize(r.registration.location) : "-",
+    }
+  }); else return [{ titel: "-", datum: "-", anmelder: "-", teilnehmerzahl: "-", ort: "-" }]
 })
 
 const collapseData = computed(() => {
-  const draft = store.getters.getDraftedRegistration as Registration
-  const remoteRegistrations = store.getters.getRegistrations as Registration[]
-  const registrations = draft.organizer?.id ? [draft, remoteRegistrations].flat() : remoteRegistrations
+  const remoteRegistrations = store.getters.getRegistrations
 
-  return registrations.map((r: Registration) => {
-    return r.assembly.topic ? { titel: r.assembly.topic ? r.assembly.topic : "-", datum: r.assembly.date ? r.assembly.date : "-", teilnehmerzahl: r.assembly.participantCount ? r.assembly.participantCount : "-", anmelder: r.applicant.firstName + " " + r.applicant.lastName, ort: r.assembly.topic ? capitalize(r.location) : "-", entwurf: draft.id === r.id ? "✅" : "" } : null
+  return remoteRegistrations.map((r: { registration: Registration, publicUrl: string }) => {
+    const asm = r.registration.assembly
+    const app = r.registration.applicant
+    return r.registration.assembly.topic ? {
+      titel: asm.topic ? r.registration.assembly.topic : "-",
+      datum: asm.date ? asm.date : "-",
+      teilnehmerzahl: asm.participantCount ? asm.participantCount : "-",
+      anmelder: app.firstName + " " + app.lastName, ort: asm.topic ? capitalize(r.registration.location) : "-",
+    } : null
   }).filter((a) => a);
 })
 
-const thead = ['Titel der Versammlung', 'Datum', 'Anzahl der Teilnehmer', 'Anmelder', 'Ort', "Entwurf", "Aktionen"]
-const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', 'entwurf', {
+const thead = ['Titel der Versammlung', 'Datum', 'Anz. Teilnehmer', 'Anmelder', 'Ort', "Aktionen"]
+const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', {
   slot: 'actions'
 }]
+const thead2 = ['Titel der Versammlung', 'Datum', 'Anz. Teilnehmer', 'Anmelder', 'Ort']
+const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort']
 </script>
 
 <template>
   <card-wrapper
-    card-title="Deine Protestveranstaltungen"
+    v-if="draftedData"
+    card-title="In Bearbeitung 🚧"
+    class="draftCardWrapper"
+    style="width: 95%; margin-top: 2em"
+  >
+    <template #content>
+      <template v-if="collapseData.length > 0" v-for="(reg, i) in draftedData">
+        <ui-collapse v-if="reg" :key="i + reg.titel" with-icon ripple class="dashboardCollapse">
+          <template #toggle>
+            <div
+              class="tet"
+              style="font-size: larger; font-weight: 500; padding-bottom: 1em; padding-top: 1em;"
+            >
+              {{
+                reg.entwurf ? '🚧 ' + reg.titel : reg.titel
+              }}
+            </div>
+          </template>
+          <div class="dashboardCollapseContent">
+            <p style="margin-top: 0em; font-weight: 400;font-size: medium">
+              🚩
+              <span style="padding-left:0.5em; font-size: small;">{{ reg.anmelder }}</span>
+            </p>
+            <p style="font-weight: 400; font-size: medium;">
+              📅
+              <span style="padding-left:0.5em">{{ reg.datum }}</span>
+            </p>
+            <p style="font-weight: 400;font-size: medium;">
+              🏠
+              <span style="padding-left:0.5em">{{ reg.ort }}</span>
+            </p>
+            <ui-button
+              v-if="reg.entwurf"
+              style="background-color: white;  color: green; width: 100%; height: 3em;"
+              raised
+              icon="attach_file"
+              @click="$router.push({ name: 'CheckForm' })"
+            >Zur Übersicht</ui-button>
+          </div>
+        </ui-collapse>
+      </template>
+
+      <p v-if="!draftedData">Derzeit ist keine Veranstaltung in Bearbeitung.</p>
+      <ui-table
+        v-else
+        class="dashboardTable"
+        fullwidth
+        :data="draftedData"
+        :thead="thead"
+        :tbody="tbody"
+      >
+        <template #actions="{ data }">
+          <ui-icon outlined @click="router.push({ name: 'CheckForm' })">edit</ui-icon>
+        </template>
+      </ui-table>
+    </template>
+  </card-wrapper>
+  <card-wrapper
+    card-title="Deine Protestveranstaltungen ✅"
     action-bar-top="true"
     action-bar-top-icon="add"
     action-bar-button-tooltip="Neue Anmeldung nach VersammlG erstellen"
     action-bar-button-link-name="EventPeopleSelection"
     action-bar-button-c-s-s-id="dashboardFab"
-    style="width: 95%; margin-top: 2em;"
+    style="width: 95%"
   >
     <template #content>
       <template v-if="collapseData.length > 0" v-for="(reg, i) in collapseData">
@@ -87,7 +172,7 @@ const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', 'entwurf',
       </template>
 
       <p v-if="collapseData.length == 0">Keine Veranstaltungen gefunden.</p>
-      <ui-table class="dashboardTable" fullwidth :data="data" :thead="thead" :tbody="tbody">
+      <ui-table class="dashboardTable" fullwidth :data="data" :thead="thead2" :tbody="tbody2">
         <template #actions="{ data }">
           <ui-icon
             v-if="data.entwurf && data.entwurf !== '-'"
@@ -110,11 +195,15 @@ const tbody = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', 'entwurf',
   }
 }
 @media (max-width: 820px) {
+  .draftCardWrapper {
+    margin-bottom: -4em;
+  }
   .dashboardTable {
     display: none;
   }
   .dashboardCollapse {
     font-size: large;
+    margin-bottom: 1em;
   }
   #dashboardFab {
     position: fixed;

@@ -43,11 +43,11 @@ const registrationsModule = {
                 const db = context.rootState.firebaseFirestore
                 const uid = context.getters.getUser.uid
 
-                const registrationsRef = collection(db, "registrations");
-                const q = query(registrationsRef, where("read", "==", uid));
-                const querySnapshot = await getDocs(q);
+                const registrationsRef = uid ? collection(db, `registrations/${uid}/docs`) : collection(db, `registrations/anon/docs`);
 
-                const registrations = querySnapshot.docs.flatMap((event: any) => { return { id: event.id, ...event.data() } })
+                const querySnapshot = await getDocs(registrationsRef);
+                const registrations = querySnapshot.docs.flatMap((event: any) => { console.log(event.data()); return { id: event.id, ...event.data() } })
+                console.log(registrations)
                 context.commit("addRegistrations", registrations)
             }
         },

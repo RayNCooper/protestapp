@@ -47,7 +47,7 @@ function submitForm() {
         <ui-spinner style="position: relative; top:30vh" fourColored active></ui-spinner>
     </template>
     <template v-if="!registration && !loading">
-        <h3>Es scheint als hättest du noch keine Anmeldung angefangen.</h3>
+        <h3 style="margin-top: 3em">Es scheint als hättest du noch keine Anmeldung angefangen.</h3>
         <router-link
             :to="{ name: 'Dashboard', query: { hasNoDraftedRegistration: true } }"
         >Zur Startseite</router-link>

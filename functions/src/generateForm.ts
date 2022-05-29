@@ -8,7 +8,6 @@ const bucket = getStorage().bucket()
 
 export const generateForm = functions.https.onCall(async (registration: Registration, context): Promise<FormError | FormResult | { error: boolean, message: string }> => {
     try {
-
         if (registration.location === "berlin") {
             try {
                 const fileRef = bucket.file('documents/germany/berlin/versammlungsanmeldung.pdf')
@@ -18,7 +17,7 @@ export const generateForm = functions.https.onCall(async (registration: Registra
                 /* const apiResponse = fileGetResponse[1] */
                 const base64File = Buffer.from((await file.download())[0]).toString('base64')
 
-                return await fillFormBerlin(registration, base64File, context.auth!.uid)
+                return await fillFormBerlin(registration, base64File, context.auth?.uid)
 
             } catch (error) {
                 return {
