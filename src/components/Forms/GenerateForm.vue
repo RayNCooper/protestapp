@@ -29,7 +29,7 @@ onBeforeMount(async () => {
                 formUrl.value = result.data.url
                 if (result.data.error == false) {
                     result as { data: { error: boolean, url: string } }
-                    /* localStorage.removeItem("draftedRegistration") */
+                    process.env.NODE_ENV == "production" && localStorage.removeItem("draftedRegistration")
                     if (!store.getters.getUser) {
                         if (localStorage.getItem("registrations")) {
                             const localRegistrations = JSON.parse(localStorage.getItem("registrations")!)
@@ -45,10 +45,13 @@ onBeforeMount(async () => {
 
                 loading.value = false
             } catch (error) {
+                errorMessage.value = "Fehler: Backend ist nicht verfügbar"
+                showFailedGenerateSnackbar.value = true;
+                failedGenerate.value = true
                 console.log(error)
                 loading.value = false
             }
-        }, 4000);
+        }, process.env.NODE_ENV == "production" ? 4000 : 1000);
 
     }
 })

@@ -69,12 +69,7 @@ const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', { slot: '
 </script>
 
 <template>
-  <card-wrapper
-    v-if="draftedData"
-    card-title="In Bearbeitung 🚧"
-    class="draftCardWrapper"
-    style="width: 95%; margin-top: 2em"
-  >
+  <card-wrapper v-if="draftedData" card-title="In Bearbeitung 🚧" class="draftCardWrapper">
     <template #content>
       <ui-collapse with-icon ripple class="dashboardCollapse">
         <template #toggle>
@@ -189,6 +184,10 @@ const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', { slot: '
 
 <style>
 @media (min-width: 820px) {
+  .draftCardWrapper {
+    width: 95%;
+    margin-top: 2em;
+  }
   .dashboardCollapse {
     display: none;
   }
@@ -199,6 +198,8 @@ const tbody2 = ['titel', 'datum', 'teilnehmerzahl', 'anmelder', 'ort', { slot: '
 @media (max-width: 820px) {
   .draftCardWrapper {
     margin-bottom: -4em;
+    width: 95%;
+    margin-top: 0;
   }
   .dashboardTable {
     display: none;

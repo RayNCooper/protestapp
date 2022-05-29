@@ -34,7 +34,7 @@ export class BerlinVersammlungRegistration implements Registration {
             emailFirst: this.applicant.email,
 
             /* Anmelder = Veranstalter */
-            hasExtraOrganizer: hasExtraOrganizer,
+            hasExtraOrganizer: !hasExtraOrganizer,
 
             /* Veranstalter & Leiter TODO: Möglichkeit zur Aufspaltung Veranstalter & Leiter und Notiz in beigefügter Seite */
             nameSecond: hasExtraOrganizer ? this.organizer.lastName + ", " + this.organizer.firstName : "",
