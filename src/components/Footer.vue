@@ -34,12 +34,12 @@ const router = useRouter()
             <div :class="$tt('caption')">
                 <a :href="router.resolve({ name: 'About' }).path" class="footerItemLink">Über Uns</a>
             </div>
-            <div :class="$tt('caption')">
+            <!-- <div :class="$tt('caption')">
                 <a
                     :href="router.resolve({ name: 'Join' }).path"
                     class="footerItemLink"
                 >Mitglied werden</a>
-            </div>
+            </div> -->
         </div>
 
         <div class="footerItem">

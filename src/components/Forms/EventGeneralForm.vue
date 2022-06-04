@@ -73,7 +73,7 @@ function formSubmitted(questionList: Array<{ id: string, answer: string }>) {
             :options="eventTypeChoices"
             title="Welche Art von Demonstration möchtest du organisieren?"
             subtitle="Es wird unterschieden zwischen Versammlung und Aufzug"
-            helpText="Hinweis: Aufzüge sind auf unserer Plattform momentan nur in Hamburg möglich"
+            helpText=" "
             :descriptionLink="general"
         ></question>
         <question

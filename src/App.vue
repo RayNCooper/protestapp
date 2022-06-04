@@ -32,18 +32,35 @@ onBeforeMount(() => {
     </ui-drawer-header>
     <ui-drawer-content>
       <ui-nav>
-        <ui-nav-item :href="router.resolve({ name: 'Dashboard' }).href">
+        <ui-nav-item :href="router.resolve({ name: 'Dashboard' }).path">
           <ui-item-first-content>
             <ui-icon>space_dashboard</ui-icon>
           </ui-item-first-content>
           <ui-item-text-content>Dashboard</ui-item-text-content>
         </ui-nav-item>
-        <ui-nav-item :href="router.resolve({ name: 'Settings' }).href">
+
+        <div style="position: absolute; bottom: 0.5em; width: 100%;">
+          <ui-nav-item :href="router.resolve({ name: 'Kontakt' }).path">
+            <ui-item-first-content>
+              <ui-icon>call</ui-icon>
+            </ui-item-first-content>
+            <ui-item-text-content>Kontakt</ui-item-text-content>
+          </ui-nav-item>
+
+          <ui-nav-item :href="router.resolve({ name: 'FAQ' }).path">
+            <ui-item-first-content>
+              <ui-icon>help</ui-icon>
+            </ui-item-first-content>
+            <ui-item-text-content>FAQ</ui-item-text-content>
+          </ui-nav-item>
+        </div>
+
+        <!-- <ui-nav-item :href="router.resolve({ name: 'Settings' }).href">
           <ui-item-first-content>
             <ui-icon>settings</ui-icon>
           </ui-item-first-content>
           <ui-item-text-content>Einstellungen</ui-item-text-content>
-        </ui-nav-item>
+        </ui-nav-item>-->
       </ui-nav>
     </ui-drawer-content>
   </ui-drawer>
@@ -123,5 +140,9 @@ body {
 }
 .landing {
   padding-top: 2em;
+}
+.drawerDivider {
+  width: 90% !important;
+  margin: 0em auto 0em auto;
 }
 </style>
