@@ -14,7 +14,8 @@ const form = reactive({
     location: null,
 })
 
-const locationChoices = [{ label: "Berlin", value: "berlin" }, { label: "Hamburg", value: "hamburg" }, { label: "Köln", value: "koeln" },]
+const locationChoices = [{ label: "Berlin", value: "berlin" }]
+/* const locationChoices = [{ label: "Berlin", value: "berlin" }, { label: "Hamburg", value: "hamburg" }, { label: "Köln", value: "koeln" },] */
 
 function onSubmit(questionList: Array<{ answer: string, id: string }>) {
     store.commit("addDraftedRegistrationLocation", form)

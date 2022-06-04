@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import logoLarge from "./assets/logo_large.png"
 import logoWide from "./assets/logo_wide.png"
+import Footer from "./components/Footer.vue"
 
 const showDrawer = ref(false)
 const router = useRouter()
@@ -28,8 +29,6 @@ onBeforeMount(() => {
   <ui-drawer v-model="showDrawer" type="modal" viewport-height nav-id="menu">
     <ui-drawer-header>
       <img :src="logoLarge" style="width: 100%;  margin-left: -2em; margin-bottom: -1em;" />
-      <!-- <ui-drawer-title style="margin-top: -1em;">Organizer</ui-drawer-title>
-      <ui-drawer-subtitle>deinprotest.net</ui-drawer-subtitle>-->
     </ui-drawer-header>
     <ui-drawer-content>
       <ui-nav>
@@ -39,12 +38,6 @@ onBeforeMount(() => {
           </ui-item-first-content>
           <ui-item-text-content>Dashboard</ui-item-text-content>
         </ui-nav-item>
-        <!--  <ui-nav-item :href="router.resolve({ name: 'History' }).href">
-          <ui-item-first-content>
-            <ui-icon>history</ui-icon>
-          </ui-item-first-content>
-          <ui-item-text-content>Verlauf</ui-item-text-content>
-        </ui-nav-item>-->
         <ui-nav-item :href="router.resolve({ name: 'Settings' }).href">
           <ui-item-first-content>
             <ui-icon>settings</ui-icon>
@@ -92,6 +85,7 @@ onBeforeMount(() => {
     <div :class="contentClass">
       <router-view></router-view>
     </div>
+    <Footer></Footer>
   </ui-drawer-app-content>
 </template>
 
@@ -99,13 +93,21 @@ onBeforeMount(() => {
 @import "@ditdot-dev/vue-flow-form/dist/vue-flow-form.css";
 @import "./assets/vue-flow-form.theme-custom.css";
 
+html {
+  height: 100%;
+}
+
 body {
+  min-height: 100%;
+  position: relative;
   margin: 0;
 }
 
 .content {
   width: 100vw;
+  min-height: 100%;
   margin-top: 3.5em;
+  margin-bottom: 1em;
 }
 .center {
   display: flex;
