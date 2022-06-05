@@ -3,7 +3,7 @@ import { Registration } from "../../../types/Registration";
 import { useStore } from "vuex";
 import CardWrapper from "../util/CardWrapper.vue";
 import { computed, onBeforeMount } from "vue";
-import { capitalize } from "lodash";
+import { capitalize } from "lodash-es";
 import { useRouter } from "vue-router";
 
 const store = useStore()
