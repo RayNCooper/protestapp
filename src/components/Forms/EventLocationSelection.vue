@@ -5,7 +5,7 @@ import { computed, reactive, onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { germanLanguageModel } from '../../languageModel';
-import { capitalize } from 'lodash';
+import { capitalize } from 'lodash-es';
 
 const router = useRouter()
 const store = useStore()

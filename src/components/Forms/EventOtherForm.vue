@@ -4,7 +4,6 @@ import { reactive, ref } from 'vue';
 import { FlowForm, Question, ChoiceOption, LinkOption } from '@ditdot-dev/vue-flow-form'
 import { germanLanguageModel } from '../../languageModel';
 import { useRouter } from 'vue-router';
-import { identity } from 'lodash';
 import { useStore } from 'vuex';
 
 const vehicleFlowForm = ref(FlowForm)

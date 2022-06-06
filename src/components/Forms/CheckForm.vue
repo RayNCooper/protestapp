@@ -7,10 +7,11 @@ import CardWrapper from '../util/CardWrapper.vue';
 import { useStore } from 'vuex';
 import { assertionError } from '@firebase/util';
 import { Registration } from '../../../types/Registration';
-import { capitalize } from 'lodash';
+import { capitalize } from 'lodash-es';
 
 const router = useRouter()
 const store = useStore()
+
 const loading = ref(true)
 const registration = ref()
 const showFailedSubmitSnackbar = ref(false)
