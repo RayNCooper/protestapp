@@ -26,7 +26,7 @@ import CardWrapper from "./util/CardWrapper.vue";
                 >Kontaktdaten polizeilicher Ansprechpartner</li>
                 <li
                     class="landingListItem landingListItemLocation"
-                >Verfügbar in Berlin, Hamburg und Köln</li>
+                >Verfügbar in <b>Berlin</b></li>
             </ul>
 
             <p style="margin-bottom: 0.5em; margin-top: 1.5em; font-size: small;">
